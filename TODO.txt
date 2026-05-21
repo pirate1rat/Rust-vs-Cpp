@@ -1,0 +1,2 @@
+c++ player mass center to 2.5 not -2.5
+a bit of refactor
