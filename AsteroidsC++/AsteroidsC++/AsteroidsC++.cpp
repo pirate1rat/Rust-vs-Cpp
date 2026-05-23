@@ -1,6 +1,11 @@
 ﻿#include <raylib.h>
 #include "Player.h"
 
+#define FORWARD 1.0f
+#define BACKWARD -1.0f
+#define LEFT -1.0f
+#define RIGHT 1.0f
+
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HIGHT = 600;
 
@@ -13,21 +18,25 @@ int main() {
     while (!WindowShouldClose()) {
         // event handling
         if (IsKeyDown(KEY_UP)) {
-            player.Move();
+            player.changeVelocity(FORWARD);
         }
-        else if (IsKeyDown(KEY_LEFT)) {
-            player.Rotate(-1);
+        if (IsKeyDown(KEY_DOWN)) {
+            player.changeVelocity(BACKWARD);
         }
-        else if (IsKeyDown(KEY_RIGHT)) {
-            player.Rotate(1);
+        if (IsKeyDown(KEY_LEFT)) {
+            player.rotate(LEFT);
+        }
+        if (IsKeyDown(KEY_RIGHT)) {
+            player.rotate(RIGHT);
         }
 
         // updating
+        player.move();
 
         // drawing
         BeginDrawing();
         ClearBackground(BLACK);
-        player.Draw();
+        player.draw();
         EndDrawing();
     }
 
