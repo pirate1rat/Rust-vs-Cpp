@@ -1,11 +1,20 @@
 #include "Asteroid.h"
 
 Asteroid::Asteroid() : Entity() {
-	points = {
-		Vector2{0.0f, -16.0f},
-		Vector2{-8.0f, 14.0f},
-		Vector2{0.0f, 9.5f},
-		Vector2{8.0f, 14.0f}
+	graphPts = {
+		Vector2{18.5f, 0.0f},
+		Vector2{8.0f, 15.5f},
+		Vector2{-9.5f, 14.0f},
+		Vector2{-19.0f, 3.0f},
+		Vector2{-12.0f, -11.0f},
+		Vector2{0.0f, -17.5f},
+		Vector2{11.5f, -12.0f}
+	};
+	hitboxPts = {
+		Vector2 {-20.0f, -20.0f},
+		Vector2 {-20.0f, 20.0f},
+		Vector2 {20.0f, 20.0f},
+		Vector2 {20.0f, -20.0f},
 	};
 	movementVec = Vector2{ randFloat(-0.1f, 0.1f), randFloat(-0.1f, 0.1f)};
 	centerOfGravity = Vector2{ 0.0f, 2.5f };

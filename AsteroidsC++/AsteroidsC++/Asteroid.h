@@ -8,4 +8,3 @@ public:
 	Asteroid();
 	float randFloat(float min, float max);
 };
-

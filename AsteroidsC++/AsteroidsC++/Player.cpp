@@ -3,11 +3,16 @@
 #include "raymath.h"
 
 Player::Player(Vector2 windowCenter) : Entity(){
-	points = { 
+	graphPts = { 
 		Vector2{0.0f, -16.0f},
 		Vector2{-8.0f, 14.0f},
 		Vector2{0.0f, 9.5f},
 		Vector2{8.0f, 14.0f} 
+	};
+	hitboxPts = {
+		Vector2{0.0f, -16.0f},
+		Vector2{-8.0f, 14.0f},
+		Vector2{8.0f, 14.0f}
 	};
 	movementVec = Vector2{ 0.0f, 0.0f };
 	centerOfGravity = Vector2{ 0.0f, 2.5f };
@@ -19,11 +24,19 @@ void Player::rotate(float rotationDirection) {
 	movementVec = Vector2Rotate(movementVec, currentRotation);
 	accelerationVec = Vector2Rotate(accelerationVec, currentRotation);
 	
-	for (int i = 0; i < 4; i++) {
-		Vector2 supportVec = Vector2{ points[i].x - centerOfGravity.x,
-									  points[i].y - centerOfGravity.y };
+	for (int i = 0; i < graphPts.size(); i++) {
+		Vector2 supportVec = Vector2{ graphPts[i].x - centerOfGravity.x,
+									  graphPts[i].y - centerOfGravity.y };
 		supportVec = Vector2Rotate(supportVec, currentRotation);
-		points[i] = Vector2{ centerOfGravity.x + supportVec.x,
+		graphPts[i] = Vector2{ centerOfGravity.x + supportVec.x,
+							 centerOfGravity.y + supportVec.y };
+	}
+
+	for (int i = 0; i < hitboxPts.size(); i++) {
+		Vector2 supportVec = Vector2{ hitboxPts[i].x - centerOfGravity.x,
+									  hitboxPts[i].y - centerOfGravity.y };
+		supportVec = Vector2Rotate(supportVec, currentRotation);
+		hitboxPts[i] = Vector2{ centerOfGravity.x + supportVec.x,
 							 centerOfGravity.y + supportVec.y };
 	}
 }

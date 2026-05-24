@@ -1,14 +1,17 @@
 ﻿#include <raylib.h>
+#include <time.h>
 #include "Player.h"
 #include "Asteroid.h"
 #include "Constants.h"
-#include <time.h>
+#include "Sprites.h"
 
 int main() {
     srand(time(NULL));
     InitWindow(WINDOW_WIDTH, WINDOW_HIGHT, "Asteroids C++");
     Vector2 center = Vector2{ WINDOW_WIDTH / 2 , WINDOW_HIGHT / 2 };
+
     Player player = Player(center);
+    
     std::vector<Asteroid*> asteroids;
     int numOfAsteroids = rand() % MAX_ASTEROIDS + 2;
 

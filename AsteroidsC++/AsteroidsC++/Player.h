@@ -1,6 +1,5 @@
 #pragma once
 #include "Entity.h"
-#include "raylib.h"
 #include "Constants.h"
 
 class Player : public Entity
