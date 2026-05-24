@@ -1,17 +1,16 @@
 #include "Player.h"
+#include "Constants.h"
 #include "raymath.h"
 
-#define EPS 0.000001f
-#define FORWARD 1.0f
-#define BACKWARD -1.0f
-#define LEFT -1.0f
-#define RIGHT 1.0f
-
 Player::Player(Vector2 windowCenter) {
+	reposition(windowCenter);
+}
+
+void Player::reposition(Vector2 repositionVec) {
 	for (int i = 0; i < 4; i++) {
-		points[i] = Vector2Add(points[i], windowCenter);
+		points[i] = Vector2Add(points[i], repositionVec);
 	}
-	centerOfGravity = Vector2Add(centerOfGravity, windowCenter);
+	centerOfGravity = Vector2Add(centerOfGravity, repositionVec);
 }
 
 void Player::draw() {
@@ -26,6 +25,20 @@ void Player::move() {
 		points[i] = Vector2Add(points[i], movementVec);
 	}
 	centerOfGravity = Vector2Add(centerOfGravity, movementVec);
+
+	if (centerOfGravity.x < (float)(-MARGIN)) {
+		reposition(Vector2{(float)(WINDOW_WIDTH + 2 * MARGIN), 0.0f});
+	}
+	else if ((float)(WINDOW_WIDTH + MARGIN) < centerOfGravity.x) {
+		reposition(Vector2{ (float)(-WINDOW_WIDTH - 2 * MARGIN), 0.0f });
+	}
+
+	if (centerOfGravity.y < (float)(-MARGIN)) {
+		reposition(Vector2{ 0.0f, (float)(WINDOW_HIGHT + 2 * MARGIN) });
+	}
+	else if ((float)(WINDOW_HIGHT + MARGIN) < centerOfGravity.y) {
+		reposition(Vector2{ 0.0f, (float)(-WINDOW_HIGHT - 2 * MARGIN) });
+	}
 }
 
 void Player::rotate(float rotationDirection) {
