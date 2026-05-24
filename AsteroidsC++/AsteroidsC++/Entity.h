@@ -14,7 +14,7 @@ public:
 
 private:
 public:
-	Entity(Vector2 center);
+	Entity();
 	void reposition(Vector2 center);
 	void draw();
 	void move();

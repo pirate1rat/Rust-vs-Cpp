@@ -2,7 +2,7 @@
 #include "Constants.h"
 #include "raymath.h"
 
-Entity::Entity(Vector2 windowCenter) {
+Entity::Entity() {
 }
 
 void Entity::reposition(Vector2 repositionVec) {

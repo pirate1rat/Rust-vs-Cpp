@@ -2,7 +2,7 @@
 #include "Constants.h"
 #include "raymath.h"
 
-Player::Player(Vector2 windowCenter) : Entity(windowCenter){
+Player::Player(Vector2 windowCenter) : Entity(){
 	points = { 
 		Vector2{0.0f, -16.0f},
 		Vector2{-8.0f, 14.0f},

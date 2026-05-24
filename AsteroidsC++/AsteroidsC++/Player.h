@@ -14,7 +14,6 @@ private:
 	Vector2 accelerationVec = Vector2{ 0.0f, -0.00005f };
 	const double rotation = 0.001f;
 	const float maxMovementVecLength = 0.12f;
-	const float minMovementVecLength = 0.0001f;
 	float accelerationDirection = FORWARD;
 
 	//Vector2 centerOfGravity = Vector2{ 0.0f, 2.5f };
