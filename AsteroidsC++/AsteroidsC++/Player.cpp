@@ -2,43 +2,16 @@
 #include "Constants.h"
 #include "raymath.h"
 
-Player::Player(Vector2 windowCenter) {
+Player::Player(Vector2 windowCenter) : Entity(windowCenter){
+	points = { 
+		Vector2{0.0f, -16.0f},
+		Vector2{-8.0f, 14.0f},
+		Vector2{0.0f, 9.5f},
+		Vector2{8.0f, 14.0f} 
+	};
+	movementVec = Vector2{ 0.0f, 0.0f };
+	centerOfGravity = Vector2{ 0.0f, 2.5f };
 	reposition(windowCenter);
-}
-
-void Player::reposition(Vector2 repositionVec) {
-	for (int i = 0; i < 4; i++) {
-		points[i] = Vector2Add(points[i], repositionVec);
-	}
-	centerOfGravity = Vector2Add(centerOfGravity, repositionVec);
-}
-
-void Player::draw() {
-	DrawLineV(points[0], points[1], RAYWHITE);
-	DrawLineV(points[1], points[2], RAYWHITE);
-	DrawLineV(points[2], points[3], RAYWHITE);
-	DrawLineV(points[3], points[0], RAYWHITE);
-}
-
-void Player::move() {
-	for (int i = 0; i < 4; i++) {
-		points[i] = Vector2Add(points[i], movementVec);
-	}
-	centerOfGravity = Vector2Add(centerOfGravity, movementVec);
-
-	if (centerOfGravity.x < (float)(-MARGIN)) {
-		reposition(Vector2{(float)(WINDOW_WIDTH + 2 * MARGIN), 0.0f});
-	}
-	else if ((float)(WINDOW_WIDTH + MARGIN) < centerOfGravity.x) {
-		reposition(Vector2{ (float)(-WINDOW_WIDTH - 2 * MARGIN), 0.0f });
-	}
-
-	if (centerOfGravity.y < (float)(-MARGIN)) {
-		reposition(Vector2{ 0.0f, (float)(WINDOW_HIGHT + 2 * MARGIN) });
-	}
-	else if ((float)(WINDOW_HIGHT + MARGIN) < centerOfGravity.y) {
-		reposition(Vector2{ 0.0f, (float)(-WINDOW_HIGHT - 2 * MARGIN) });
-	}
 }
 
 void Player::rotate(float rotationDirection) {
