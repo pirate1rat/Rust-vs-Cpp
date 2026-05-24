@@ -10,13 +10,13 @@ int main() {
     InitWindow(WINDOW_WIDTH, WINDOW_HIGHT, "Asteroids C++");
     Vector2 center = Vector2{ WINDOW_WIDTH / 2 , WINDOW_HIGHT / 2 };
 
-    Player player = Player(center);
+    Player player = Player(center, Sprite::PLAYER);
     
     std::vector<Asteroid*> asteroids;
     int numOfAsteroids = rand() % MAX_ASTEROIDS + 2;
 
     for (int i = 0; i < numOfAsteroids; i++) {
-        asteroids.push_back(new Asteroid());
+        asteroids.push_back(new Asteroid(Sprite::SMALL1));
     }
     
 

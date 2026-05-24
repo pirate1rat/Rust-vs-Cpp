@@ -5,6 +5,6 @@
 class Asteroid : public Entity
 {
 public:
-	Asteroid();
+	Asteroid(Sprite spriteEnum);
 	float randFloat(float min, float max);
 };
