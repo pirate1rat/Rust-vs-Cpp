@@ -1,6 +1,10 @@
+use crate::entity::Entity;
+
 use ggez::{Context, GameResult};
 use ggez::glam::{Mat2, Vec2};
 use ggez::graphics::{Canvas, Color, DrawParam, Mesh};
+
+
 
 pub struct Player{
     points: [Vec2; 4],

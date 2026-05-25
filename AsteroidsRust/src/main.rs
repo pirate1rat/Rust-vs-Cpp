@@ -1,4 +1,7 @@
 mod player;
+mod entity;
+mod sprites;
+
 use player::Player;
 
 use ggez::{Context, ContextBuilder, GameResult};
