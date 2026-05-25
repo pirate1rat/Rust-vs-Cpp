@@ -84,8 +84,62 @@ void Entity::move() {
 	}
 }
 
-bool Entity::overlap(Entity& other)
-{
+float Entity::cross(Vector2 a, Vector2 b, Vector2 c) {
+	return (b.x - a.x) * (c.y - a.y)
+		- (b.y - a.y) * (c.x - a.x);
+}
+
+bool Entity::onSegment(Vector2 a, Vector2 b, Vector2 p) {
+	return std::min(a.x, b.x) <= p.x && p.x <= std::max(a.x, b.x)
+		&& std::min(a.y, b.y) <= p.y && p.y <= std::max(a.y, b.y);
+}
+
+bool Entity::checkCollision(Entity* other) {
+	for (int i = 0; i < prefab->hLength - 1; i++) {
+		Vector2 a = Vector2Add(prefab->hPoints[i], position);
+		Vector2 b = Vector2Add(prefab->hPoints[i+1], position);
+		for (int j = 0; j < other->prefab->hLength - 1; j++) {
+			Vector2 c = Vector2Add(other->prefab->hPoints[j], other->position);
+			Vector2 d = Vector2Add(other->prefab->hPoints[j+1], other->position);
+
+			float d1 = cross(a, b, c);
+			float d2 = cross(a, b, d);
+			float d3 = cross(c, d, a);
+			float d4 = cross(c, d, b);
+
+			if ((d1 > 0 && d2 < 0 || d1 < 0 && d2 > 0) &&
+				(d3 > 0 && d4 < 0 || d3 < 0 && d4 > 0)) {
+				return true;
+			}
+
+			// edgecase
+			if (abs(d1) < EPS && onSegment(a, b, c)) return true;
+			if (abs(d2) < EPS && onSegment(a, b, d)) return true;
+			if (abs(d3) < EPS && onSegment(c, d, a)) return true;
+			if (abs(d4) < EPS && onSegment(c, d, b)) return true;
+		}
+	}
+
+	Vector2 a = Vector2Add(prefab->hPoints[prefab->hLength - 1], position);
+	Vector2 b = Vector2Add(prefab->hPoints[0], position);
+	Vector2 c = Vector2Add(other->prefab->hPoints[other->prefab->hLength - 1], other->position);
+	Vector2 d = Vector2Add(other->prefab->hPoints[0], other->position);
+
+	float d1 = cross(a, b, c);
+	float d2 = cross(a, b, d);
+	float d3 = cross(c, d, a);
+	float d4 = cross(c, d, b);
+
+	if ((d1 > 0 && d2 < 0 || d1 < 0 && d2 > 0) &&
+		(d3 > 0 && d4 < 0 || d3 < 0 && d4 > 0)) {
+		return true;
+	}
+
+	// edgecase
+	if (abs(d1) < EPS && onSegment(a, b, c)) return true;
+	if (abs(d2) < EPS && onSegment(a, b, d)) return true;
+	if (abs(d3) < EPS && onSegment(c, d, a)) return true;
+	if (abs(d4) < EPS && onSegment(c, d, b)) return true;
 	
 	return false;
 }

@@ -15,11 +15,13 @@ protected:
 public:
 
 private:
+	float cross(Vector2 a, Vector2 b, Vector2 c);
+	bool onSegment(Vector2 a, Vector2 b, Vector2 p);
 public:
 	Entity(Sprite spriteEnum);
 	void reposition(Vector2 center);
 	void draw();
 	void move();
-	bool overlap(Entity& other); // true if collides with other
+	bool checkCollision(Entity* other); // true if collides with other
 };
 

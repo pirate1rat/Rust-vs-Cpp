@@ -5,6 +5,8 @@
 #include "Constants.h"
 #include "Sprites.h"
 
+#include <iostream>
+
 int main() {
     srand(time(NULL));
     InitWindow(WINDOW_WIDTH, WINDOW_HIGHT, "Asteroids C++");
@@ -41,6 +43,14 @@ int main() {
             asteroids[i]->move();
         }
         player.move();
+
+        //////////////
+        for (int i = 0; i < numOfAsteroids; i++) {
+            if (player.checkCollision(asteroids[i])) {
+                std::cout << "kolizja! " << asteroids[i]->getPosition().x <<" "<< asteroids[i]->getPosition().y << std::endl;
+                break;
+            }
+        }
 
         // drawing
         BeginDrawing();

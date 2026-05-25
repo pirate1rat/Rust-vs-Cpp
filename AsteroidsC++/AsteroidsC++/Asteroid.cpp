@@ -10,3 +10,8 @@ Asteroid::Asteroid(Sprite spriteEnum) : Entity(spriteEnum) {
 float Asteroid::randFloat(float min, float max) {
 	return min + (float)(rand()) / RAND_MAX * (max - min);
 }
+
+Vector2 Asteroid::getPosition()
+{
+	return position;
+}
