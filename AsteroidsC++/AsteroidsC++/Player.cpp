@@ -9,7 +9,7 @@ Player::Player(Vector2 windowCenter, Sprite spriteEnum) : Entity(spriteEnum){
 }
 
 void Player::rotate(float rotationDirection) {
-	float r = R * rotationDirection;
+	float r = rotationUnit * rotationDirection;
 	rotation += r;
 	movementVec = Vector2Rotate(movementVec, r);
 	accelerationVec = Vector2Rotate(accelerationVec, r);

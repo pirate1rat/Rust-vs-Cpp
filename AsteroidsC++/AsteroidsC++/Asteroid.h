@@ -6,6 +6,5 @@ class Asteroid : public Entity
 {
 public:
 	Asteroid(Sprite spriteEnum);
-	float randFloat(float min, float max);
 	Vector2 getPosition();
 };

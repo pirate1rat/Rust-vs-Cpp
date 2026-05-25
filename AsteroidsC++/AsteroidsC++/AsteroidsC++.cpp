@@ -1,5 +1,6 @@
 ﻿#include <raylib.h>
 #include <time.h>
+#include <memory>
 #include "Player.h"
 #include "Asteroid.h"
 #include "Constants.h"
@@ -9,17 +10,17 @@
 
 int main() {
     srand(time(NULL));
-    InitWindow(WINDOW_WIDTH, WINDOW_HIGHT, "Asteroids C++");
-    Vector2 center = Vector2{ WINDOW_WIDTH / 2 , WINDOW_HIGHT / 2 };
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Asteroids C++");
+    Vector2 center = Vector2{ WINDOW_WIDTH / 2 , WINDOW_HEIGHT / 2 };
 
     Player player = Player(center, Sprite::PLAYER);
     
-    std::vector<Asteroid*> asteroids;
+    std::vector<std::unique_ptr<Asteroid>> asteroids;
     int numOfAsteroids = (rand() % MAX_ASTEROIDS) + 4;
 
     for (int i = 0; i < numOfAsteroids; i++) {
         Sprite randomSprite = static_cast<Sprite>((rand() % (Sprite::ENUM_LENGTH - 2)) + 1);
-        asteroids.push_back(new Asteroid(randomSprite));
+        asteroids.push_back(std::make_unique<Asteroid>(randomSprite));
     }
     
 
@@ -39,15 +40,15 @@ int main() {
         }
 
         // updating
-        for (int i = 0; i < numOfAsteroids; i++) {
-            asteroids[i]->move();
+        for (auto& asteroid : asteroids) {
+            asteroid->move();
         }
         player.move();
 
         //////////////
-        for (int i = 0; i < numOfAsteroids; i++) {
-            if (player.checkCollision(asteroids[i])) {
-                std::cout << "kolizja! " << asteroids[i]->getPosition().x <<" "<< asteroids[i]->getPosition().y << std::endl;
+        for (auto& asteroid : asteroids) {
+            if (player.checkCollision(*asteroid)) {
+                std::cout << "kolizja! " << asteroid->getPosition().x <<" "<< asteroid->getPosition().y << std::endl;
                 break;
             }
         }
@@ -56,8 +57,8 @@ int main() {
         BeginDrawing();
         ClearBackground(BLACK);
         player.draw();
-        for (int i = 0; i < numOfAsteroids; i++) {
-            asteroids[i]->draw();
+        for (auto& asteroid : asteroids) {
+            asteroid->draw();
         }
         EndDrawing();
     }

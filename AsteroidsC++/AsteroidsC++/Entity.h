@@ -1,7 +1,8 @@
 #pragma once
+#include <vector>
+#include <memory>
 #include "raylib.h"
 #include "Constants.h"
-#include <vector>
 #include "Sprites.h"
 
 class Entity
@@ -10,10 +11,14 @@ protected:
 	const SpriteStruct* prefab;
 	Vector2 movementVec;
 	Vector2 position; //centerOfGravity
-	double rotation = 0.0f;
+	float rotation = 0.0f;
 	Color defaultColor = RAYWHITE;
 public:
+private:
 
+protected:
+	Vector2 transform(Vector2 p);
+	float randFloat(float min, float max);
 private:
 	float cross(Vector2 a, Vector2 b, Vector2 c);
 	bool onSegment(Vector2 a, Vector2 b, Vector2 p);
@@ -22,6 +27,6 @@ public:
 	void reposition(Vector2 center);
 	void draw();
 	void move();
-	bool checkCollision(Entity* other); // true if collides with other
+	bool checkCollision(Entity& other); // true if collides with other
 };
 

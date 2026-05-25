@@ -1,7 +1,7 @@
 #pragma once
 
 constexpr int WINDOW_WIDTH = 800;
-constexpr int WINDOW_HIGHT = 600;
+constexpr int WINDOW_HEIGHT = 600;
 constexpr int MARGIN = 30;
 
 constexpr int MAX_ASTEROIDS = 7;
