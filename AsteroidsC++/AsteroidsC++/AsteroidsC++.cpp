@@ -13,10 +13,11 @@ int main() {
     Player player = Player(center, Sprite::PLAYER);
     
     std::vector<Asteroid*> asteroids;
-    int numOfAsteroids = rand() % MAX_ASTEROIDS + 2;
+    int numOfAsteroids = (rand() % MAX_ASTEROIDS) + 4;
 
     for (int i = 0; i < numOfAsteroids; i++) {
-        asteroids.push_back(new Asteroid(Sprite::SMALL1));
+        Sprite randomSprite = static_cast<Sprite>((rand() % (Sprite::ENUM_LENGTH - 2)) + 1);
+        asteroids.push_back(new Asteroid(randomSprite));
     }
     
 

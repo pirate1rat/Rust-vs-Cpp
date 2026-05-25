@@ -1,12 +1,6 @@
 #include "Asteroid.h"
 
 Asteroid::Asteroid(Sprite spriteEnum) : Entity(spriteEnum) {
-	hitboxPts = {
-		Vector2 {-20.0f, -20.0f},
-		Vector2 {-20.0f, 20.0f},
-		Vector2 {20.0f, 20.0f},
-		Vector2 {20.0f, -20.0f},
-	};
 	movementVec = Vector2{ randFloat(-0.1f, 0.1f), randFloat(-0.1f, 0.1f)};
 	position = Vector2{ 0.0f, 0.0f };
 	Vector2 spawnPoint = Vector2{ (float)(rand() % WINDOW_WIDTH), (float)(rand() % WINDOW_HIGHT) };

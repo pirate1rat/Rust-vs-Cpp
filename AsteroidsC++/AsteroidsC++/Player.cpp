@@ -3,11 +3,6 @@
 #include "raymath.h"
 
 Player::Player(Vector2 windowCenter, Sprite spriteEnum) : Entity(spriteEnum){
-	hitboxPts = {
-		Vector2{0.0f, -16.0f},
-		Vector2{-8.0f, 14.0f},
-		Vector2{8.0f, 14.0f}
-	};
 	movementVec = Vector2{ 0.0f, 0.0f };
 	position = Vector2{ 0.0f, 2.5f }; //center of gravity
 	reposition(windowCenter);

@@ -2,9 +2,9 @@
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HIGHT = 600;
-constexpr int MARGIN = 20;
+constexpr int MARGIN = 30;
 
-constexpr int MAX_ASTEROIDS = 5;
+constexpr int MAX_ASTEROIDS = 7;
 
 constexpr float EPS = 0.000001f;
 

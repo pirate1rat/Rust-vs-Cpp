@@ -1,9 +1,12 @@
 #pragma once
 #include "raylib.h"
+#include "Hitboxes.h"
 
 struct SpriteStruct {
-	const Vector2* points;
-	const int length;
+	const Vector2* gPoints;
+	const int gLength;
+	const Vector2* hPoints;
+	const int hLength;
 };
 
 enum Sprite
@@ -17,6 +20,7 @@ enum Sprite
 	BIG1,
 	BIG2,
 	BIG3,
+	ENUM_LENGTH
 };
 
 static const Vector2 player[] = {
@@ -118,13 +122,13 @@ static const Vector2 big3[] = {
 };
 
 static const SpriteStruct static_sprites[] = {
-	SpriteStruct{ player, 4 },
-	SpriteStruct{ small1, 7 },
-	SpriteStruct{ small2, 8 },
-	SpriteStruct{ medium1, 7 },
-	SpriteStruct{ medium2, 7 },
-	SpriteStruct{ medium3, 10 },
-	SpriteStruct{ big1, 8 },
-	SpriteStruct{ big2, 9 },
-	SpriteStruct{ big3, 10 },
+	SpriteStruct{ player, 4, hPlayer, 3 },
+	SpriteStruct{ small1, 7, hSmallAsteroid, 4 },
+	SpriteStruct{ small2, 8, hSmallAsteroid, 4 },
+	SpriteStruct{ medium1, 7, hMediumAsteroid, 4 },
+	SpriteStruct{ medium2, 7, hMediumAsteroid, 4 },
+	SpriteStruct{ medium3, 10, hMediumAsteroid, 4 },
+	SpriteStruct{ big1, 8, hBigAsteroid, 4 },
+	SpriteStruct{ big2, 9, hBigAsteroid, 4 },
+	SpriteStruct{ big3, 10, hBigAsteroid, 4 },
 };
