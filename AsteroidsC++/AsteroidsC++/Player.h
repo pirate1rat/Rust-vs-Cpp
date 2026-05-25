@@ -1,27 +1,27 @@
 #pragma once
-#include "raylib.h"
+#include "Entity.h"
+#include "Constants.h"
 
-class Player
+class Player : public Entity
 {
 private:
-	Vector2 points[4] = { 
-		Vector2{0.0f, -16.0f},
-		Vector2{-8.0f, 14.0f},
-		Vector2{0.0f, 9.5f},
-		Vector2{8.0f, 14.0f}
-	};
-	Vector2 centerOfGravity = Vector2{ 0.0f, -2.5f };
+	//std::vector<Vector2> points = { Vector2{0.0f, -16.0f},
+	//					  Vector2{-8.0f, 14.0f},
+	//					  Vector2{0.0f, 9.5f},
+	//					  Vector2{8.0f, 14.0f} };
+	//Vector2 movementVec = Vector2{ 0.0f, 0.0f };
+	Vector2 accelerationVec = Vector2{ 0.0f, -0.00005f };
+	const double R = 0.001f;
+	const float maxMovementVecLength = 0.12f;
+	float accelerationDirection = FORWARD;
 
-	Vector2 movementVec = Vector2{ 0.0f, -0.1f };
-	const float rotation = 0.001f;
-	
-	const Color playerColor = Color{255, 255, 255, 255};	
+	//Vector2 centerOfGravity = Vector2{ 0.0f, 2.5f };
+	//Color playerColor = Color{255, 255, 255, 255};	
 
 private:
 public:
-	Player(Vector2 windowCenter);
-	void Draw();
-	void Move();
-	void Rotate(int rotationDirection);
+	Player(Vector2 center, Sprite spriteEnum);
+	void rotate(float rotationDirection);
+	void changeVelocity(float accelerationDirection);
 };
 

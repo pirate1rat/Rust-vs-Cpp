@@ -1,36 +1,34 @@
 #include "Player.h"
+#include "Constants.h"
 #include "raymath.h"
 
-Player::Player(Vector2 windowCenter) {
-	for (int i = 0; i < 4; i++) {
-		points[i] = Vector2Add(points[i], windowCenter);
+Player::Player(Vector2 windowCenter, Sprite spriteEnum) : Entity(spriteEnum){
+	movementVec = Vector2{ 0.0f, 0.0f };
+	position = Vector2{ 0.0f, 2.5f }; //center of gravity
+	reposition(windowCenter);
+}
+
+void Player::rotate(float rotationDirection) {
+	float r = R * rotationDirection;
+	rotation += r;
+	movementVec = Vector2Rotate(movementVec, r);
+	accelerationVec = Vector2Rotate(accelerationVec, r);
+}
+
+void Player::changeVelocity(float accelerationDirection) {
+	if (accelerationDirection == BACKWARD && movementVec == Vector2{ 0.0f, 0.0f })
+		return;
+
+	if (this->accelerationDirection != accelerationDirection) {
+		this->accelerationDirection = accelerationDirection;
+		accelerationVec = Vector2Negate(accelerationVec);
 	}
-	centerOfGravity = Vector2Add(centerOfGravity, windowCenter);
-}
 
-void Player::Draw() {
-	DrawLineV(points[0], points[1], RAYWHITE);
-	DrawLineV(points[1], points[2], RAYWHITE);
-	DrawLineV(points[2], points[3], RAYWHITE);
-	DrawLineV(points[3], points[0], RAYWHITE);
-}
-
-void Player::Move() {
-	for (int i = 0; i < 4; i++) {
-		points[i] = Vector2Add(points[i], movementVec);
+	Vector2 newMovementVec = Vector2Add(movementVec, accelerationVec);
+	if (Vector2DotProduct(newMovementVec, movementVec) < 0) {
+		movementVec = { 0.0f, 0.0f };
 	}
-	centerOfGravity = Vector2Add(centerOfGravity, movementVec);
-}
-
-void Player::Rotate(int rotationDirection) {
-	double currentRotation = rotation * rotationDirection;
-	movementVec = Vector2Rotate(movementVec, currentRotation);
-	
-	for (int i = 0; i < 4; i++) {
-		Vector2 supportVec = Vector2{ points[i].x - centerOfGravity.x,
-									  points[i].y - centerOfGravity.y };
-		supportVec = Vector2Rotate(supportVec, currentRotation);
-		points[i] = Vector2{ centerOfGravity.x + supportVec.x,
-							 centerOfGravity.y + supportVec.y };
+	else if (Vector2Length(newMovementVec) <= maxMovementVecLength) {
+		movementVec = newMovementVec;
 	}
 }
