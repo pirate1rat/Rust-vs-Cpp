@@ -1,10 +1,11 @@
 use ggez::glam::{Mat2, Vec2};
 
 pub struct SpriteStruct {
-    g_points: &'static [Vec2],
-    h_points: &'static [Vec2],
+    pub g_points: &'static [Vec2],
+    pub h_points: &'static [Vec2],
 }
 
+#[repr(usize)]
 pub enum SpriteType {
     PLAYER = 0,
     SMALL1,
@@ -16,6 +17,12 @@ pub enum SpriteType {
     BIG2,
     BIG3,
     ENUM_LENGTH
+}
+
+impl SpriteType {
+    pub fn idx(self) -> usize {
+        self as usize
+    }
 }
 
 static PLAYER: [Vec2; 4] = [

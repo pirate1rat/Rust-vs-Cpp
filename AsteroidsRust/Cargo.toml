@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 ggez = "0.9"
+rand = "0.9.4"
