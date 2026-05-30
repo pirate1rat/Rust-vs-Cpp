@@ -2,16 +2,20 @@ mod player;
 mod entity;
 mod sprites;
 mod constants;
+mod asteroid;
 
-use player::Player;
 use ggez::{Context, ContextBuilder, GameResult};
 use ggez::conf::WindowMode;
 use ggez::graphics::{self, Color};
 use ggez::event::{self, EventHandler};
 use ggez::glam::Vec2;
 use ggez::input::keyboard::{self, KeyCode};
-use crate::constants::{BACKWARD, FORWARD, LEFT, RIGHT};
+use rand::prelude::ThreadRng;
+use rand::Rng;
+use crate::constants::*;
+use player::Player;
 use crate::sprites::{SpriteType, STATIC_SPRITES};
+use asteroid::Asteroid;
 
 const WINDOW_WIDTH: f32 = 800.0;
 const WINDOW_HEIGHT: f32 = 600.0;
@@ -37,17 +41,36 @@ fn main() {
 }
 
 struct MyGame {
-    player: Player
+    player: Player,
+    asteroids: Vec<Asteroid>,
+    rng: ThreadRng
 }
 
 impl MyGame {
     pub fn new(_ctx: &mut Context) -> MyGame {
+        let mut rng = rand::rng();
+
         // Load/create resources such as images here.
+        let mut asteroids: Vec<Asteroid> = Vec::new();
+        let num_of_asteroids: i32 = rng.random_range(1..=MAX_ASTEROIDS) + 4;
+
+        for i in 0..num_of_asteroids {
+            let sprite = SpriteType::random(&mut rng);
+            asteroids.push(
+                Asteroid::new(
+                    &mut rng,
+                    &STATIC_SPRITES[sprite.idx()]
+                )
+            );
+        }
+
         MyGame {
             player: Player::new(
                 Vec2{x: WINDOW_WIDTH/2.0, y: WINDOW_HEIGHT/2.0},
                 &STATIC_SPRITES[SpriteType::PLAYER.idx()]
             ),
+            asteroids,
+            rng
         }
     }
 }
@@ -69,7 +92,16 @@ impl EventHandler for MyGame {
         }
 
         //updating entities
+        for mut asteroid in self.asteroids.iter_mut() {
+            asteroid.entity.move_entity();
+        }
         self.player.entity.move_entity();
+
+        for asteroid in self.asteroids.iter() {
+            if self.player.entity.check_collision(&asteroid.entity) {
+                println!("kolizja! {:?}", asteroid.entity.position);
+            }
+        }
 
         Ok(())
     }
@@ -77,6 +109,11 @@ impl EventHandler for MyGame {
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
         let mut canvas = graphics::Canvas::from_frame(ctx, Color::BLACK);
         self.player.entity.draw(ctx, &mut canvas).expect("TODO: panic message");
+
+        for asteroid in self.asteroids.iter() {
+            asteroid.entity.draw(ctx, &mut canvas).expect("TODO: panic message");
+        }
+
         canvas.finish(ctx)?;
 
         Ok(())

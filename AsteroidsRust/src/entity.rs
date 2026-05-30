@@ -97,7 +97,7 @@ impl Entity {
     }
 
     ///////
-    fn rand_float(rng: &mut impl Rng, min: f32, max: f32) -> f32 {
+    pub fn rand_float(rng: &mut impl Rng, min: f32, max: f32) -> f32 {
         rng.random_range(min..max)
     }
 

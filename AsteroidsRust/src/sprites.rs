@@ -1,4 +1,5 @@
 use ggez::glam::{Mat2, Vec2};
+use rand::Rng;
 
 pub struct SpriteStruct {
     pub g_points: &'static [Vec2],
@@ -22,6 +23,21 @@ pub enum SpriteType {
 impl SpriteType {
     pub fn idx(self) -> usize {
         self as usize
+    }
+
+    pub fn random(rng: &mut impl Rng) -> Self {
+        match rng.random_range(1..SpriteType::ENUM_LENGTH as usize) {
+            0 => SpriteType::PLAYER,
+            1 => SpriteType::SMALL1,
+            2 => SpriteType::SMALL2,
+            3 => SpriteType::MEDIUM1,
+            4 => SpriteType::MEDIUM2,
+            5 => SpriteType::MEDIUM3,
+            6 => SpriteType::BIG1,
+            7 => SpriteType::BIG2,
+            8 => SpriteType::BIG3,
+            _ => unreachable!(),
+        }
     }
 }
 
