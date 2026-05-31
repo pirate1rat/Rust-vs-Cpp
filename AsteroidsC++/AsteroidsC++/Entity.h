@@ -26,7 +26,7 @@ public:
 	Entity(Sprite spriteEnum);
 	void reposition(Vector2 center);
 	void draw();
-	void move();
+	void move(float deltaTime);
 	bool checkCollision(Entity& other); // true if collides with other
 };
 

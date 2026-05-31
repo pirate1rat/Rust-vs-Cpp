@@ -8,14 +8,14 @@ Player::Player(Vector2 windowCenter, Sprite spriteEnum) : Entity(spriteEnum){
 	reposition(windowCenter);
 }
 
-void Player::rotate(float rotationDirection) {
-	float r = rotationUnit * rotationDirection;
+void Player::rotate(float rotationDirection, float deltaTime) {
+	float r = rotationUnit * rotationDirection * deltaTime;
 	rotation += r;
 	movementVec = Vector2Rotate(movementVec, r);
 	accelerationVec = Vector2Rotate(accelerationVec, r);
 }
 
-void Player::changeVelocity(float accelerationDirection) {
+void Player::changeVelocity(float accelerationDirection, float deltaTime) {
 	if (accelerationDirection == BACKWARD && movementVec == Vector2{ 0.0f, 0.0f })
 		return;
 
@@ -24,7 +24,7 @@ void Player::changeVelocity(float accelerationDirection) {
 		accelerationVec = Vector2Negate(accelerationVec);
 	}
 
-	Vector2 newMovementVec = Vector2Add(movementVec, accelerationVec);
+	Vector2 newMovementVec = Vector2Scale(Vector2Add(movementVec, accelerationVec), deltaTime);
 	if (Vector2DotProduct(newMovementVec, movementVec) < 0) {
 		movementVec = { 0.0f, 0.0f };
 	}

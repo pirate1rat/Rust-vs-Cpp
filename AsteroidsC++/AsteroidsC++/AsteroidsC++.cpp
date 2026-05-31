@@ -11,6 +11,8 @@
 int main() {
     srand(time(NULL));
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Asteroids C++");
+    SetTargetFPS(60);
+
     Vector2 center = Vector2{ WINDOW_WIDTH / 2 , WINDOW_HEIGHT / 2 };
 
     Player player = Player(center, Sprite::PLAYER);
@@ -26,24 +28,26 @@ int main() {
 
     while (!WindowShouldClose()) {
         // event handling
+        float deltaTime = GetFrameTime();
+
         if (IsKeyDown(KEY_UP)) {
-            player.changeVelocity(FORWARD);
+            player.changeVelocity(FORWARD, deltaTime);
         }
         if (IsKeyDown(KEY_DOWN)) {
-            player.changeVelocity(BACKWARD);
+            player.changeVelocity(BACKWARD, deltaTime);
         }
         if (IsKeyDown(KEY_LEFT)) {
-            player.rotate(LEFT);
+            player.rotate(LEFT, deltaTime);
         }
         if (IsKeyDown(KEY_RIGHT)) {
-            player.rotate(RIGHT);
+            player.rotate(RIGHT, deltaTime);
         }
 
         // updating
         for (auto& asteroid : asteroids) {
-            asteroid->move();
+            asteroid->move(deltaTime);
         }
-        player.move();
+        player.move(deltaTime);
 
         //////////////
         for (auto& asteroid : asteroids) {

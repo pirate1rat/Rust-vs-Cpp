@@ -48,8 +48,8 @@ void Entity::draw() {
 
 }
 
-void Entity::move() {
-	position = Vector2Add(position, movementVec);
+void Entity::move(float deltaTime) {
+	position = Vector2Add(position, Vector2Scale(movementVec, deltaTime));
 
 	if (position.x < static_cast<float>(-MARGIN)) {
 		reposition(Vector2{ static_cast<float>(WINDOW_WIDTH + 2 * MARGIN), 0.0f });
