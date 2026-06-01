@@ -3,7 +3,8 @@
 #include "raymath.h"
 
 Player::Player(Vector2 windowCenter, Sprite spriteEnum) : Entity(spriteEnum){
-	movementVec = Vector2{ 0.0f, 0.0f };
+	velocityVec = Vector2{ 0.0f, 0.0f };
+	directionUnitVec = Vector2{ 0.0f, -1.0f };
 	position = Vector2{ 0.0f, 2.5f }; //center of gravity
 	reposition(windowCenter);
 }
@@ -11,24 +12,25 @@ Player::Player(Vector2 windowCenter, Sprite spriteEnum) : Entity(spriteEnum){
 void Player::rotate(float rotationDirection, float deltaTime) {
 	float r = rotationUnit * rotationDirection * deltaTime;
 	rotation += r;
-	movementVec = Vector2Rotate(movementVec, r);
-	accelerationVec = Vector2Rotate(accelerationVec, r);
+	directionUnitVec = Vector2Rotate(directionUnitVec, r);
+	velocityVec = Vector2Rotate(velocityVec, r);
 }
 
 void Player::changeVelocity(float accelerationDirection, float deltaTime) {
-	if (accelerationDirection == BACKWARD && movementVec == Vector2{ 0.0f, 0.0f })
+	if (accelerationDirection == BACKWARD && velocityVec == Vector2Zero())
 		return;
 
 	if (this->accelerationDirection != accelerationDirection) {
 		this->accelerationDirection = accelerationDirection;
-		accelerationVec = Vector2Negate(accelerationVec);
 	}
+	float currentAcceleration = acceleration * this->accelerationDirection;
 
-	Vector2 newMovementVec = Vector2Scale(Vector2Add(movementVec, accelerationVec), deltaTime);
-	if (Vector2DotProduct(newMovementVec, movementVec) < 0) {
-		movementVec = { 0.0f, 0.0f };
+	Vector2 forwardUnitVec = Vector2Scale(directionUnitVec, currentAcceleration);
+	Vector2 newVelocityVec = Vector2Add(velocityVec, Vector2Scale(forwardUnitVec, deltaTime));
+	if (Vector2DotProduct(newVelocityVec, velocityVec) < 0) {
+		velocityVec = Vector2Zero();
 	}
-	else if (Vector2Length(newMovementVec) <= maxMovementVecLength) {
-		movementVec = newMovementVec;
+	else if (Vector2Length(newVelocityVec) <= maxMovementVecLength) {
+		velocityVec = newVelocityVec;
 	}
 }

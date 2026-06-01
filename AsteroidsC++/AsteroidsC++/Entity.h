@@ -9,7 +9,8 @@ class Entity
 {
 protected:
 	const SpriteStruct* prefab;
-	Vector2 movementVec;
+	//Vector2 directionUnitVec;
+	Vector2 velocityVec;
 	Vector2 position; //centerOfGravity
 	float rotation = 0.0f;
 	Color defaultColor = RAYWHITE;
@@ -25,8 +26,9 @@ private:
 public:
 	Entity(Sprite spriteEnum);
 	void reposition(Vector2 center);
-	void draw();
 	void move(float deltaTime);
+	//void rotate(float rotationDirection, float deltaTime);
+	void draw();
 	bool checkCollision(Entity& other); // true if collides with other
 };
 

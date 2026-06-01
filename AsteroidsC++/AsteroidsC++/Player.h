@@ -5,9 +5,10 @@
 class Player : public Entity
 {
 private:
-	Vector2 accelerationVec = Vector2{ 0.0f, -15.0f };
+	Vector2 directionUnitVec;
 	const float rotationUnit = 2.0f;
-	const float maxMovementVecLength = 60.0f;
+	const float maxMovementVecLength = 300.0f;
+	const float acceleration = 300.0f;
 	float accelerationDirection = FORWARD;
 public:
 

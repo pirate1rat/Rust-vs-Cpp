@@ -11,7 +11,7 @@
 int main() {
     srand(time(NULL));
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Asteroids C++");
-    SetTargetFPS(60);
+    SetTargetFPS(120);
 
     Vector2 center = Vector2{ WINDOW_WIDTH / 2 , WINDOW_HEIGHT / 2 };
 

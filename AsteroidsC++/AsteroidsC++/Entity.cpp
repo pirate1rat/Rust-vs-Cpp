@@ -6,10 +6,7 @@
 
 Entity::Entity(Sprite spriteEnum) {
 	this->prefab = &static_sprites[spriteEnum];
-}
-
-void Entity::reposition(Vector2 repositionVec) {
-	position = Vector2Add(position, repositionVec);
+	//this->directionUnitVec = Vector2{ 0.0f, -1.0f };
 }
 
 void Entity::draw() {
@@ -48,8 +45,19 @@ void Entity::draw() {
 
 }
 
+void Entity::reposition(Vector2 repositionVec) {
+	position = Vector2Add(position, repositionVec);
+}
+
+//void Entity::rotate(float rotationDirection, float deltaTime) {
+//	float r = rotationUnit * rotationDirection * deltaTime;
+//	rotation += r;
+//	directionUnitVec = Vector2Rotate(directionUnitVec, r);
+//	//accelerationVec = Vector2Rotate(accelerationVec, r);
+//}
+
 void Entity::move(float deltaTime) {
-	position = Vector2Add(position, Vector2Scale(movementVec, deltaTime));
+	position = Vector2Add(position, Vector2Scale(velocityVec, deltaTime));
 
 	if (position.x < static_cast<float>(-MARGIN)) {
 		reposition(Vector2{ static_cast<float>(WINDOW_WIDTH + 2 * MARGIN), 0.0f });
