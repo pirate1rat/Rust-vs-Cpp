@@ -46,7 +46,7 @@ void Entity::draw() {
 }
 
 void Entity::reposition(Vector2 repositionVec) {
-	position = Vector2Add(position, repositionVec);
+	this->position = Vector2Add(this->position, repositionVec);
 }
 
 //void Entity::rotate(float rotationDirection, float deltaTime) {

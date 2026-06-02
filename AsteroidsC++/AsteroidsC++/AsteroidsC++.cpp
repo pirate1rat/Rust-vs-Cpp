@@ -13,8 +13,10 @@ int main() {
     SetTargetFPS(120);
 
     Vector2 center = Vector2{ WINDOW_WIDTH / 2 , WINDOW_HEIGHT / 2 };
+    std::vector<std::unique_ptr<Entity>> entities;
 
     Player player = Player(center, Sprite::PLAYER);
+
     float shotTimer = 0.0f;
     std::vector<std::unique_ptr<Projectile>> projectiles;
     
@@ -57,18 +59,41 @@ int main() {
         for (auto& projectile : projectiles) {
             projectile->move(deltaTime);
         }
-        std::erase_if(projectiles, [](const auto& p) {
-            return !p->alive;
-        });
         player.move(deltaTime);
 
-        //////////////
+        // collisions
         for (auto& asteroid : asteroids) {
             if (player.checkCollision(*asteroid)) {
                 std::cout << "kolizja! " << asteroid->getPosition().x <<" "<< asteroid->getPosition().y << std::endl;
                 break;
             }
         }
+
+        std::vector<std::unique_ptr<Asteroid>> newAsteroids; // a valuable lesson - do not modify vector during iteration
+        for (auto& projectile : projectiles) {
+            for (auto& asteroid : asteroids) {
+                if (!asteroid) continue;
+
+                if (projectile->checkCollision(*asteroid)) {
+                    projectile->alive = false;
+
+                    auto splitAst = asteroid->split();
+                    if (splitAst)
+                        newAsteroids.push_back(std::move(splitAst));
+                }
+            }
+        }
+        for (auto& a : newAsteroids)
+            asteroids.push_back(std::move(a));
+
+        // clearing
+        std::erase_if(asteroids, [](const auto& asteroid) {
+            return asteroid == nullptr || !asteroid->alive;
+        });
+        std::erase_if(projectiles, [](const auto& p) {
+            return !p->alive;
+        });
+
 
         // drawing
         BeginDrawing();

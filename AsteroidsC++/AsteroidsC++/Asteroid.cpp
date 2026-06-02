@@ -13,21 +13,31 @@ std::unique_ptr<Asteroid> Asteroid::split() {
 		case AsteroidSize::BIG:
 		{
 			Sprite randomMediumSprite = static_cast<Sprite>((rand() % 3 + 3));
-			return std::make_unique<Asteroid>(randomMediumSprite);
+			auto newAsteroid = std::make_unique<Asteroid>(randomMediumSprite);
+			newAsteroid->position = this->position;
+			this->prefab = &static_sprites[randomMediumSprite];
+			this->asteroidSize = this->prefab->asteroidSize;
+			return newAsteroid;
 		}
 		case AsteroidSize::MEDIUM:
 		{
 			Sprite randomSmallSprite = static_cast<Sprite>((rand() % 2 + 1));
-			return std::make_unique<Asteroid>(randomSmallSprite);
+			auto newAsteroid = std::make_unique<Asteroid>(randomSmallSprite);
+			newAsteroid->position = this->position;
+			this->prefab = &static_sprites[randomSmallSprite];
+			this->asteroidSize = this->prefab->asteroidSize;
+			return newAsteroid;
 		}
 		case AsteroidSize::SMALL:
 		{
 			alive = false;
 			return nullptr;
 		}
+
+		return nullptr;
 	}
 }
 
 Vector2 Asteroid::getPosition() {
-	return position;
+	return this->position;
 }
