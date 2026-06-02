@@ -13,8 +13,10 @@ protected:
 	Vector2 velocityVec;
 	Vector2 position; //centerOfGravity
 	float rotation = 0.0f;
+	
 	Color defaultColor = RAYWHITE;
 public:
+	bool alive = true;
 private:
 
 protected:
@@ -26,7 +28,7 @@ private:
 public:
 	Entity(Sprite spriteEnum);
 	void reposition(Vector2 center);
-	void move(float deltaTime);
+	virtual void move(float deltaTime);
 	//void rotate(float rotationDirection, float deltaTime);
 	void draw();
 	bool checkCollision(Entity& other); // true if collides with other

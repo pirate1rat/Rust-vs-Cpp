@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "Constants.h"
+#include "Projectile.h"
 
 class Player : public Entity
 {
@@ -17,5 +18,6 @@ public:
 	Player(Vector2 center, Sprite spriteEnum);
 	void rotate(float rotationDirection, float deltaTime);
 	void changeVelocity(float accelerationDirection, float deltaTime);
+	std::unique_ptr<Projectile> createProjectile();
 };
 

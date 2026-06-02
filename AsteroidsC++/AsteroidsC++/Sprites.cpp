@@ -98,14 +98,22 @@ static const Vector2 big3[] = {
 	Vector2{37.0f, -13.0f}
 };
 
+static const Vector2 projectile[] = {
+	Vector2{0.0f, -2.5f},
+	Vector2{-2.5f, 0.0f},
+	Vector2{0.0f, 2.5f},
+	Vector2{2.5f, 0.0f},
+};
+
 const SpriteStruct static_sprites[] = {
-	SpriteStruct{ player, 4, hPlayer, 3 },
-	SpriteStruct{ small1, 7, hSmallAsteroid, 4 },
-	SpriteStruct{ small2, 8, hSmallAsteroid, 4 },
-	SpriteStruct{ medium1, 7, hMediumAsteroid, 4 },
-	SpriteStruct{ medium2, 7, hMediumAsteroid, 4 },
-	SpriteStruct{ medium3, 10, hMediumAsteroid, 4 },
-	SpriteStruct{ big1, 8, hBigAsteroid, 4 },
-	SpriteStruct{ big2, 9, hBigAsteroid, 4 },
-	SpriteStruct{ big3, 10, hBigAsteroid, 4 },
+	SpriteStruct{ player, 4, hPlayer, 3, AsteroidSize::NONE },
+	SpriteStruct{ small1, 7, hSmallAsteroid, 4, AsteroidSize::SMALL },
+	SpriteStruct{ small2, 8, hSmallAsteroid, 4, AsteroidSize::SMALL },
+	SpriteStruct{ medium1, 7, hMediumAsteroid, 4, AsteroidSize::MEDIUM },
+	SpriteStruct{ medium2, 7, hMediumAsteroid, 4, AsteroidSize::MEDIUM },
+	SpriteStruct{ medium3, 10, hMediumAsteroid, 4, AsteroidSize::MEDIUM },
+	SpriteStruct{ big1, 8, hBigAsteroid, 4, AsteroidSize::BIG },
+	SpriteStruct{ big2, 9, hBigAsteroid, 4, AsteroidSize::BIG },
+	SpriteStruct{ big3, 10, hBigAsteroid, 4, AsteroidSize::BIG },
+	SpriteStruct{ projectile, 4, hProjectile, 4, AsteroidSize::NONE },
 };

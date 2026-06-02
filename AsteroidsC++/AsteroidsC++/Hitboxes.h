@@ -35,3 +35,10 @@ static const Vector2 hBigAsteroid[] = {
 	Vector2{ 40.0f, 40.0f },
 	Vector2{ 40.0f, -40.0f }
 };
+
+static const Vector2 hProjectile[] = {
+	Vector2{0.0f, -2.5f},
+	Vector2{-2.5f, 0.0f},
+	Vector2{0.0f, 2.5f},
+	Vector2{2.5f, 0.0f},
+};

@@ -34,3 +34,10 @@ void Player::changeVelocity(float accelerationDirection, float deltaTime) {
 		velocityVec = newVelocityVec;
 	}
 }
+
+std::unique_ptr<Projectile> Player::createProjectile() {
+	Vector2 start = position + Vector2Scale(directionUnitVec, 10.0f);
+	Vector2 speed = Vector2Scale(directionUnitVec, 500.0f);
+	std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(start, speed, Sprite::PROJECTILE);
+	return projectile;
+}

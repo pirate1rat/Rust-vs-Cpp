@@ -12,3 +12,5 @@ constexpr float FORWARD = 1.0f;
 constexpr float BACKWARD = -1.0f;
 constexpr float LEFT = -1.0f;
 constexpr float RIGHT = 1.0f;
+
+constexpr float PLAYER_SHOT_TIMER = 1.0f;
