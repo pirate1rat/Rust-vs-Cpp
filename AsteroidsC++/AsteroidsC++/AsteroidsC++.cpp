@@ -64,7 +64,7 @@ int main() {
         // collisions
         for (auto& asteroid : asteroids) {
             if (player.checkCollision(*asteroid)) {
-                std::cout << "kolizja! " << asteroid->getPosition().x <<" "<< asteroid->getPosition().y << std::endl;
+                //std::cout << "kolizja! " << asteroid->getPosition().x <<" "<< asteroid->getPosition().y << std::endl;
                 break;
             }
         }

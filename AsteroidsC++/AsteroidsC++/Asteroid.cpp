@@ -1,43 +1,41 @@
 #include "Asteroid.h"
 
-Asteroid::Asteroid(Sprite spriteEnum) : Entity(spriteEnum) {
-	asteroidSize = prefab->asteroidSize;
-	velocityVec = Vector2{ randFloat(-80.0f, 80.0f), randFloat(-80.0f, 80.0f) };
+Asteroid::Asteroid(int typeIdx) : Entity(ASTEROID_TYPES[typeIdx].sprite) {
+	this->typeIdx = typeIdx;
 	position = Vector2{ 0.0f, 0.0f };
-	Vector2 spawnPoint = Vector2{ static_cast<float>(rand() % WINDOW_WIDTH), static_cast<float>(rand() % WINDOW_HEIGHT) };
+
+	float xVelocity = randFloat(MIN_ASTEROID_VELOCITY, MAX_ASTEROID_VELOCITY);
+	if (rand() % 2 == 0) xVelocity = -xVelocity;
+	float yVelocity = randFloat(MIN_ASTEROID_VELOCITY, MAX_ASTEROID_VELOCITY);
+	if (rand() % 2 == 0) yVelocity = -yVelocity;
+	velocityVec = Vector2{ xVelocity, yVelocity };
+	
+	Vector2 spawnPoint;
+	do {
+		spawnPoint = Vector2{
+			static_cast<float>(rand() % WINDOW_WIDTH),
+			static_cast<float>(rand() % WINDOW_HEIGHT)
+		};
+	} while ((spawnPoint.x <= (WINDOW_WIDTH / 2 - SPAWNPOINT_SAFEZONE)
+		|| (WINDOW_WIDTH / 2 + SPAWNPOINT_SAFEZONE) <= spawnPoint.x)
+		&& ((spawnPoint.y <= (WINDOW_HEIGHT / 2 - SPAWNPOINT_SAFEZONE)
+			|| (WINDOW_HEIGHT / 2 + SPAWNPOINT_SAFEZONE) <= spawnPoint.y))
+		);
 	reposition(spawnPoint);
 }
 
 std::unique_ptr<Asteroid> Asteroid::split() {
-	switch (asteroidSize) {
-		case AsteroidSize::BIG:
-		{
-			Sprite randomMediumSprite = static_cast<Sprite>((rand() % 3 + 3));
-			auto newAsteroid = std::make_unique<Asteroid>(randomMediumSprite);
-			newAsteroid->position = this->position;
-			this->prefab = &static_sprites[randomMediumSprite];
-			this->asteroidSize = this->prefab->asteroidSize;
-			return newAsteroid;
-		}
-		case AsteroidSize::MEDIUM:
-		{
-			Sprite randomSmallSprite = static_cast<Sprite>((rand() % 2 + 1));
-			auto newAsteroid = std::make_unique<Asteroid>(randomSmallSprite);
-			newAsteroid->position = this->position;
-			this->prefab = &static_sprites[randomSmallSprite];
-			this->asteroidSize = this->prefab->asteroidSize;
-			return newAsteroid;
-		}
-		case AsteroidSize::SMALL:
-		{
-			alive = false;
-			return nullptr;
-		}
+	const AsteroidType& t = ASTEROID_TYPES[typeIdx];
 
+	if (t.splitCount == 0) {
+		alive = false;
 		return nullptr;
 	}
-}
+	int childTypeIdx = t.splitInto[rand() % t.splitCount];
+	typeIdx = t.splitInto[rand() % t.splitCount];
+	this->prefab = &SPRITES[ASTEROID_TYPES[typeIdx].sprite];
 
-Vector2 Asteroid::getPosition() {
-	return this->position;
+	auto child = std::make_unique<Asteroid>(childTypeIdx);
+	child->position = position;
+	return child;
 }

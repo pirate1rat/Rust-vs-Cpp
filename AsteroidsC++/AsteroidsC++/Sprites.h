@@ -2,34 +2,25 @@
 #include "raylib.h"
 #include "Hitboxes.h"
 
-enum AsteroidSize
-{
-	NONE,
-	SMALL,
-	MEDIUM,
-	BIG
-};
-
 struct SpriteStruct {
-	const Vector2* gPoints;
+	const Vector2* graphicPoints;
 	const int gLength;
-	const Vector2* hPoints;
+	const Vector2* hitboxPoints;
 	const int hLength;
-	AsteroidSize asteroidSize; //used only by asteroids
 };
 
 enum Sprite
 {
 	PLAYER = 0,
-	SMALL1,
-	SMALL2,
-	MEDIUM1,
-	MEDIUM2,
-	MEDIUM3,
-	BIG1,
-	BIG2,
-	BIG3,
-	PROJECTILE, //ends asteroid sprites
+	ASTEROID_SMALL_1,
+	ASTEROID_SMALL_2,
+	ASTEROID_MEDIUM_1,
+	ASTEROID_MEDIUM_2,
+	ASTEROID_MEDIUM_3,
+	ASTEROID_BIG_1,
+	ASTEROID_BIG_2,
+	ASTEROID_BIG_3,
+	PROJECTILE,
 };
 
-extern const SpriteStruct static_sprites[];
+extern const SpriteStruct SPRITES[];

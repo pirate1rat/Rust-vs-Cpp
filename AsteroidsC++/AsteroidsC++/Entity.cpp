@@ -5,28 +5,28 @@
 #define DEBUG
 
 Entity::Entity(Sprite spriteEnum) {
-	this->prefab = &static_sprites[spriteEnum];
+	this->prefab = &SPRITES[spriteEnum];
 	//this->directionUnitVec = Vector2{ 0.0f, -1.0f };
 }
 
 void Entity::draw() {
 	for (int i = 0; i < prefab->gLength; i++) {
-		Vector2 p1 = transform(prefab->gPoints[i]);
-		Vector2 p2 = transform(prefab->gPoints[(i+1)%prefab->gLength]);
+		Vector2 p1 = transform(prefab->graphicPoints[i]);
+		Vector2 p2 = transform(prefab->graphicPoints[(i+1)%prefab->gLength]);
 		DrawLineV(p1, p2, defaultColor);
 	}
 
 #ifdef DEBUG
 	Vector2 p0, p1, p2, supportVec;
 	for (int i = 0; i < prefab->hLength - 1; i++) {
-		p1 = Vector2Add(prefab->hPoints[i], position);
+		p1 = Vector2Add(prefab->hitboxPoints[i], position);
 		supportVec = Vector2{ p1.x - position.x,
 							  p1.y - position.y };
 		supportVec = Vector2Rotate(supportVec, rotation);
 		p1 = Vector2{ position.x + supportVec.x,
 					  position.y + supportVec.y };
 
-		p2 = Vector2Add(prefab->hPoints[i + 1], position);
+		p2 = Vector2Add(prefab->hitboxPoints[i + 1], position);
 		supportVec = Vector2{ p2.x - position.x,
 							  p2.y - position.y };
 		supportVec = Vector2Rotate(supportVec, rotation);
@@ -34,7 +34,7 @@ void Entity::draw() {
 					  position.y + supportVec.y };
 		DrawLineV(p1, p2, BLUE);
 	}
-	p0 = Vector2Add(prefab->hPoints[0], position);
+	p0 = Vector2Add(prefab->hitboxPoints[0], position);
 	supportVec = Vector2{ p0.x - position.x,
 						  p0.y - position.y };
 	supportVec = Vector2Rotate(supportVec, rotation);
@@ -76,11 +76,11 @@ void Entity::move(float deltaTime) {
 
 bool Entity::checkCollision(Entity& other) {
 	for (int i = 0; i < prefab->hLength; i++) {
-		Vector2 a = transform(prefab->hPoints[i]);
-		Vector2 b = transform(prefab->hPoints[(i+1)%prefab->hLength]);
+		Vector2 a = transform(prefab->hitboxPoints[i]);
+		Vector2 b = transform(prefab->hitboxPoints[(i+1)%prefab->hLength]);
 		for (int j = 0; j < other.prefab->hLength; j++) {
-			Vector2 c = other.transform(other.prefab->hPoints[j]);
-			Vector2 d = other.transform(other.prefab->hPoints[(j+1)%other.prefab->hLength]);
+			Vector2 c = other.transform(other.prefab->hitboxPoints[j]);
+			Vector2 d = other.transform(other.prefab->hitboxPoints[(j+1)%other.prefab->hLength]);
 			
 			float d1 = cross(a, b, c);
 			float d2 = cross(a, b, d);
