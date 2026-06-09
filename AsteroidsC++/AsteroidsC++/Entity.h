@@ -1,36 +1,32 @@
 #pragma once
-#include <vector>
 #include <memory>
 #include "raylib.h"
 #include "Constants.h"
 #include "Sprites.h"
+#include "Renderer.h"
+#include "CollisionChecker.h"
 
 class Entity
 {
 protected:
 	const SpriteStruct* prefab;
-	//Vector2 directionUnitVec;
+	Vector2 directionUnitVec;
 	Vector2 velocityVec;
 	Vector2 position; //centerOfGravity
 	float rotation = 0.0f;
-	
+	const float rotationUnit = DEFAULT_ROTATION_UNIT;
 	Color defaultColor = RAYWHITE;
 public:
 	bool alive = true;
-private:
 
-protected:
-	Vector2 transform(Vector2 p);
-	float randFloat(float min, float max);
-private:
-	float cross(Vector2 a, Vector2 b, Vector2 c);
-	bool onSegment(Vector2 a, Vector2 b, Vector2 p);
 public:
 	Entity(Sprite spriteEnum);
 	void reposition(Vector2 center);
 	virtual void move(float deltaTime);
-	//void rotate(float rotationDirection, float deltaTime);
+	void rotate(float rotationDirection, float deltaTime);
 	void draw();
-	bool checkCollision(Entity& other); // true if collides with other
+	// true if collides with other
+	bool checkCollision(Entity& other);
+	Vector2 getPosition();
 };
 

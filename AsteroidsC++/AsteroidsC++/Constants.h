@@ -1,5 +1,7 @@
 #pragma once
 
+#define DEBUG
+
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
 constexpr int MARGIN = 30;
@@ -16,5 +18,7 @@ constexpr float FORWARD = 1.0f;
 constexpr float BACKWARD = -1.0f;
 constexpr float LEFT = -1.0f;
 constexpr float RIGHT = 1.0f;
+
+constexpr float DEFAULT_ROTATION_UNIT = 2.0f;
 
 constexpr float PLAYER_SHOT_TIMER = 1.0f;
