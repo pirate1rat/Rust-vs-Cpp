@@ -18,27 +18,13 @@ pub enum SpriteType {
     ASTEROID_BIG_1,
     ASTEROID_BIG_2,
     ASTEROID_BIG_3,
+    PROJECTILE,
     ENUM_LENGTH
 }
 
 impl SpriteType {
     pub fn idx(self) -> usize {
         self as usize
-    }
-
-    pub fn random(rng: &mut impl Rng) -> Self {
-        match rng.random_range(1..SpriteType::ENUM_LENGTH as usize) {
-            0 => SpriteType::PLAYER,
-            1 => SpriteType::ASTEROID_SMALL_1,
-            2 => SpriteType::ASTEROID_SMALL_2,
-            3 => SpriteType::ASTEROID_MEDIUM_1,
-            4 => SpriteType::ASTEROID_MEDIUM_2,
-            5 => SpriteType::ASTEROID_MEDIUM_3,
-            6 => SpriteType::ASTEROID_BIG_1,
-            7 => SpriteType::ASTEROID_BIG_2,
-            8 => SpriteType::ASTEROID_BIG_3,
-            _ => unreachable!(),
-        }
     }
 }
 
@@ -140,6 +126,13 @@ static ASTEROID_BIG_3: [Vec2; 10] = [
     Vec2 { x: 37.0, y: -13.0 },
 ];
 
+static PROJECTILE: [Vec2; 4] = [
+    Vec2{ x: 0.0, y:-2.5 },
+    Vec2{ x: -2.5, y: 0.0 },
+    Vec2{ x: 0.0, y: 2.5 },
+    Vec2{ x: 2.5, y: 0.0 },
+];
+
 ////// HITBOXES
 
 static H_PLAYER: [Vec2; 3] = [
@@ -169,9 +162,16 @@ static H_BIG_ASTEROID: [Vec2; 4] = [
     Vec2 { x: 40.0, y: -40.0 },
 ];
 
+static H_PROJECTILE: [Vec2; 4] = [
+    Vec2{ x: 0.0, y: -2.5},
+    Vec2{ x: -2.5,y:  0.0},
+    Vec2{ x: 0.0, y: 2.5},
+    Vec2{ x: 2.5, y: 0.0},
+]; 
+
 //////// READY PREFABS
 
-pub static SPRITES: [SpriteStruct; 9] = [
+pub static SPRITES: [SpriteStruct; 10] = [
     SpriteStruct {
         g_points: &PLAYER,
         h_points: &H_PLAYER,
@@ -207,5 +207,9 @@ pub static SPRITES: [SpriteStruct; 9] = [
     SpriteStruct {
         g_points: &ASTEROID_BIG_3,
         h_points: &H_BIG_ASTEROID,
+    },
+    SpriteStruct {
+        g_points: &PROJECTILE,
+        h_points: &H_PROJECTILE,
     },
 ];

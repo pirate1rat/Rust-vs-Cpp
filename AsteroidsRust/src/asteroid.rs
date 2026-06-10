@@ -1,7 +1,7 @@
 use ggez::glam::Vec2;
 use rand::Rng;
 use crate::entity::Entity;
-use crate::sprites::{SpriteStruct, SpriteType};
+use crate::sprites::{SpriteStruct, SpriteType, SPRITES};
 use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::utils::rand_float;
 use crate::constants::*;
@@ -17,13 +17,13 @@ enum AsteroidSize
 static BIG_SPLIT_INTO: [i32; 3] = [ 3, 4, 5 ]; // indexes for medium
 static MEDIUM_SPLIT_INTO: [i32; 2] = [ 6, 7 ]; // indexes for small
 
-struct AsteroidType {
+pub struct AsteroidType {
     sprite: SpriteType,
     size: AsteroidSize,
     split_into: Option<&'static [i32]>,
 }
 
-static ASTEROID_TYPES: [AsteroidType; 8] = [
+pub static ASTEROID_TYPES: [AsteroidType; 8] = [
     AsteroidType { sprite: SpriteType::ASTEROID_BIG_1, size: AsteroidSize::BIG,    split_into: Some(&BIG_SPLIT_INTO) },
     AsteroidType { sprite: SpriteType::ASTEROID_BIG_2, size: AsteroidSize::BIG,    split_into: Some(&BIG_SPLIT_INTO) },
     AsteroidType { sprite: SpriteType::ASTEROID_BIG_3, size: AsteroidSize::BIG,    split_into: Some(&BIG_SPLIT_INTO) },
@@ -69,6 +69,27 @@ impl Asteroid {
         Asteroid {
             type_idx,
             entity: ent,
+        }
+    }
+
+    pub fn split(&mut self, rng: &mut impl Rng) -> Option<Asteroid> {
+        let t: &AsteroidType = &ASTEROID_TYPES[self.type_idx];
+
+        match &t.split_into {
+            Some(split_into) => {
+                let idx = rng.random_range(0..split_into.len());
+                let child_type_idx = split_into[idx] as usize;
+                let idx = rng.random_range(0..split_into.len());
+                self.type_idx = split_into[idx] as usize;
+                self.entity.prefab = &SPRITES[ASTEROID_TYPES[self.type_idx].sprite.clone().idx()];
+                let mut child: Asteroid = Asteroid::new(rng, child_type_idx);
+                child.entity.position = self.entity.position;
+                Some(child)
+            }
+            None => {
+                self.entity.alive = false;
+                return None;
+            }
         }
     }
 }
