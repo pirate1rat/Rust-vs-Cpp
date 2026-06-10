@@ -33,6 +33,13 @@ void drawSprite(const SpriteStruct& prefab, Vector2 position, float rotation, Co
 	p0 = Vector2{ position.x + supportVec.x,
 				  position.y + supportVec.y };
 	DrawLineV(p2, p0, BLUE);
+
+
+	DrawRectangleLines(WINDOW_WIDTH / 2 - SPAWNPOINT_SAFEZONE,
+					WINDOW_HEIGHT / 2 - SPAWNPOINT_SAFEZONE,
+		SPAWNPOINT_SAFEZONE * 2,
+		SPAWNPOINT_SAFEZONE * 2,
+		GREEN);
 #endif // DEBUG
 
 }

@@ -28,6 +28,7 @@ public:
 	// true if collides with other
 	bool checkCollision(Entity& other);
 
+	virtual ~Entity() = default;
 	Vector2 getPosition();
 };
 

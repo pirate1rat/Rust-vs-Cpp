@@ -6,7 +6,7 @@ constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
 constexpr int MARGIN = 30;
 
-constexpr int SPAWNPOINT_SAFEZONE = 50;
+constexpr int SPAWNPOINT_SAFEZONE = 150; //spawnpoint for player
 
 constexpr int MAX_ASTEROIDS = 7;
 constexpr float MIN_ASTEROID_VELOCITY = 40.0f;

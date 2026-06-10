@@ -15,11 +15,11 @@ Asteroid::Asteroid(int typeIdx) : Entity(ASTEROID_TYPES[typeIdx].sprite) {
 			static_cast<float>(rand() % WINDOW_WIDTH),
 			static_cast<float>(rand() % WINDOW_HEIGHT)
 		};
-	} while ((spawnPoint.x <= (WINDOW_WIDTH / 2 - SPAWNPOINT_SAFEZONE)
-		|| (WINDOW_WIDTH / 2 + SPAWNPOINT_SAFEZONE) <= spawnPoint.x)
-		&& ((spawnPoint.y <= (WINDOW_HEIGHT / 2 - SPAWNPOINT_SAFEZONE)
-			|| (WINDOW_HEIGHT / 2 + SPAWNPOINT_SAFEZONE) <= spawnPoint.y))
-		);
+	} while (
+		((spawnPoint.x <= (WINDOW_WIDTH / 2 - SPAWNPOINT_SAFEZONE)) || ((WINDOW_WIDTH / 2 + SPAWNPOINT_SAFEZONE) <= spawnPoint.x))
+		&& 
+		((spawnPoint.y <= (WINDOW_HEIGHT / 2 - SPAWNPOINT_SAFEZONE)) || ((WINDOW_HEIGHT / 2 + SPAWNPOINT_SAFEZONE) <= spawnPoint.y))
+	);
 	reposition(spawnPoint);
 }
 
