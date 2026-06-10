@@ -3,6 +3,9 @@ mod entity;
 mod sprites;
 mod constants;
 mod asteroid;
+mod renderer;
+mod collision_checker;
+mod utils;
 
 use ggez::{Context, ContextBuilder, GameResult};
 use ggez::conf::WindowMode;
@@ -14,7 +17,7 @@ use rand::prelude::ThreadRng;
 use rand::Rng;
 use crate::constants::*;
 use player::Player;
-use crate::sprites::{SpriteType, STATIC_SPRITES};
+use crate::sprites::{SpriteType, SPRITES};
 use asteroid::Asteroid;
 
 const WINDOW_WIDTH: f32 = 800.0;
@@ -59,7 +62,7 @@ impl MyGame {
             asteroids.push(
                 Asteroid::new(
                     &mut rng,
-                    &STATIC_SPRITES[sprite.idx()]
+                    &SPRITES[sprite.idx()]
                 )
             );
         }
@@ -67,7 +70,7 @@ impl MyGame {
         MyGame {
             player: Player::new(
                 Vec2{x: WINDOW_WIDTH/2.0, y: WINDOW_HEIGHT/2.0},
-                &STATIC_SPRITES[SpriteType::PLAYER.idx()]
+                &SPRITES[SpriteType::PLAYER.idx()]
             ),
             asteroids,
             rng

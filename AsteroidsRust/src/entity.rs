@@ -1,9 +1,11 @@
 use ggez::{Context, GameResult};
-use ggez::glam::{Mat2, Vec2};
-use ggez::graphics::{Canvas, Color, DrawParam, Mesh};
-use rand::{Rng};
-use crate::sprites::{SpriteStruct};
+use ggez::glam::{Vec2};
+use ggez::graphics::{Canvas, Color};
+use crate::collision_checker::check_collision;
+use crate::sprites::{SpriteStruct, SpriteType, SPRITES};
 use crate::constants::*;
+use crate::renderer::draw_sprite;
+
 
 pub struct Entity {
     pub prefab: &'static SpriteStruct,
@@ -14,9 +16,9 @@ pub struct Entity {
 }
 
 impl Entity {
-    pub fn new(prefab: &'static SpriteStruct) -> Self {
+    pub fn new(sprite: SpriteType) -> Self {
         Entity{
-            prefab,
+            prefab: &SPRITES[sprite.idx()],
             movement_vec: Vec2{ x: 0.0, y: 0.0},
             position: Vec2{ x: 0.0, y: 0.0},
             rotation: 0.0,
@@ -25,6 +27,9 @@ impl Entity {
     }
 
     //////getters/setters
+    pub fn get_position(&self) -> Vec2 {
+        self.position
+    }
     //////////
 
     pub fn reposition(&mut self, reposition_vec: Vec2) {
@@ -50,79 +55,10 @@ impl Entity {
     }
 
     pub fn draw(&self, ctx: &mut Context, canvas: &mut Canvas) -> GameResult {
-        let self_length = self.prefab.g_points.len();
-        for (i, point) in self.prefab.g_points.iter().enumerate() {
-            let p1 = self.transform(self.prefab.g_points[i]);
-            let p2 = self.transform(self.prefab.g_points[(i+1)%self_length]);
-            let line = Mesh::new_line(
-                ctx,
-                &[ p1, p2 ],
-                1.0,
-                self.default_color,
-            )?;
-
-            canvas.draw(&line, DrawParam::default());
-        }
-        Ok(())
+        draw_sprite(ctx, canvas, self.prefab, self.position, self.rotation, self.default_color)
     }
 
     pub fn check_collision(&self, other: &Entity) -> bool {
-        let self_length = self.prefab.h_points.len();
-        let other_length = other.prefab.h_points.len();
-        for (i, _) in self.prefab.h_points.iter().enumerate() {
-            let a: Vec2 = self.transform(self.prefab.h_points[i]);
-            let b: Vec2 = self.transform(self.prefab.h_points[(i+1)%self_length]);
-            for (j, _) in other.prefab.h_points.iter().enumerate() {
-                let c: Vec2 = other.transform(other.prefab.h_points[j]);
-                let d: Vec2 = other.transform(other.prefab.h_points[(j+1)%other_length]);
-
-                let d1 = Self::cross(a, b, c);
-                let d2 = Self::cross(a, b, d);
-                let d3 = Self::cross(c, d, a);
-                let d4 = Self::cross(c, d, b);
-
-                if (d1 > 0.0 && d2 < 0.0 || d1 < 0.0 && d2 > 0.0) &&
-                    (d3 > 0.0 && d4 < 0.0 || d3 < 0.0 && d4 > 0.0) {
-                    return true
-                }
-
-                if d1.abs() < EPS && Self::on_segment(a, b, c) { return true };
-                if d2.abs() < EPS && Self::on_segment(a, b, d) { return true };
-                if d3.abs() < EPS && Self::on_segment(c, d, a) { return true };
-                if d4.abs() < EPS && Self::on_segment(c, d, b) { return true };
-            }
-        }
-
-        false
+        check_collision(self.prefab, self.position, self.rotation, other.prefab, other.position, other.rotation)
     }
-
-    ///////
-    pub fn rand_float(rng: &mut impl Rng, min: f32, max: f32) -> f32 {
-        rng.random_range(min..max)
-    }
-
-    fn cross(a: Vec2, b: Vec2, c: Vec2) -> f32 {
-        (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
-    }
-
-    fn on_segment(a: Vec2, b: Vec2, p: Vec2) -> bool {
-        a.x.min(b.x) <= p.x && p.x <= a.x.max(b.x)
-        && a.y.min(b.y) <= p.y && p.y <= a.y.max(b.y)
-    }
-
-    fn transform(&self, p: Vec2) -> Vec2 {
-        let p: Vec2 = p + self.position;
-        let support_vec: Vec2 = Vec2{
-            x: p.x - self.position.x,
-            y: p.y - self.position.y,
-        };
-        let rot = Mat2::from_angle(self.rotation);
-        let support_vec: Vec2 = rot * support_vec;
-        Vec2{
-            x: self.position.x + support_vec.x,
-            y: self.position.y + support_vec.y,
-        }
-    }
-
-
 }
