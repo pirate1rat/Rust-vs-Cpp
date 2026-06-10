@@ -50,7 +50,7 @@ int main() {
         if (IsKeyPressed(KEY_SPACE) && shotTimer <= 0) {
             shotTimer = PLAYER_SHOT_TIMER;
             std::cout << "piuu!\n";
-            projectiles.push_back(player.createProjectile());
+            projectiles.push_back(player.shootProjectile());
         }
 
         // updating

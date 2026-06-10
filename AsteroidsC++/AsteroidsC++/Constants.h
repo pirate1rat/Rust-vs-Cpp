@@ -19,6 +19,14 @@ constexpr float BACKWARD = -1.0f;
 constexpr float LEFT = -1.0f;
 constexpr float RIGHT = 1.0f;
 
+constexpr Vector2 DEFAULT_UNIT_VECTOR = Vector2{ 0.0f, -1.0f };
+constexpr Vector2 DEFAULT_POSITION = Vector2{ 0.0f, 0.0f };
 constexpr float DEFAULT_ROTATION_UNIT = 2.0f;
 
 constexpr float PLAYER_SHOT_TIMER = 1.0f;
+constexpr float PLAYER_ROTATION_UNIT = 2.0f;
+constexpr float PLAYER_MAX_SPEED = 300.0f;
+constexpr float PLAYER_ACCELERATION = 300.0f;
+
+constexpr float PROJECTILE_SPEED = 500.0f;
+constexpr float PROJECTILE_START_OFFSET = 10.0f;

@@ -10,9 +10,9 @@ class Entity
 {
 protected:
 	const SpriteStruct* prefab;
-	Vector2 directionUnitVec;
-	Vector2 velocityVec;
-	Vector2 position; //centerOfGravity
+	Vector2 directionUnitVec = DEFAULT_UNIT_VECTOR;
+	Vector2 velocityVec = Vector2Zero();
+	Vector2 position = DEFAULT_POSITION; //centerOfGravity
 	float rotation = 0.0f;
 	const float rotationUnit = DEFAULT_ROTATION_UNIT;
 	Color defaultColor = RAYWHITE;
@@ -27,6 +27,7 @@ public:
 	void draw();
 	// true if collides with other
 	bool checkCollision(Entity& other);
+
 	Vector2 getPosition();
 };
 

@@ -3,17 +3,8 @@
 #include "raymath.h"
 
 Player::Player(Vector2 windowCenter, Sprite spriteEnum) : Entity(spriteEnum){
-	velocityVec = Vector2{ 0.0f, 0.0f };
-	directionUnitVec = Vector2{ 0.0f, -1.0f };
 	position = Vector2{ 0.0f, 2.5f }; //center of gravity
 	reposition(windowCenter);
-}
-
-void Player::rotate(float rotationDirection, float deltaTime) {
-	float r = rotationUnit * rotationDirection * deltaTime;
-	rotation += r;
-	directionUnitVec = Vector2Rotate(directionUnitVec, r);
-	velocityVec = Vector2Rotate(velocityVec, r);
 }
 
 void Player::changeVelocity(float accelerationDirection, float deltaTime) {
@@ -35,9 +26,9 @@ void Player::changeVelocity(float accelerationDirection, float deltaTime) {
 	}
 }
 
-std::unique_ptr<Projectile> Player::createProjectile() {
-	Vector2 start = position + Vector2Scale(directionUnitVec, 10.0f);
-	Vector2 speed = Vector2Scale(directionUnitVec, 500.0f);
+std::unique_ptr<Projectile> Player::shootProjectile() {
+	Vector2 start = position + Vector2Scale(directionUnitVec, PROJECTILE_START_OFFSET);
+	Vector2 speed = Vector2Scale(directionUnitVec, PROJECTILE_SPEED);
 	std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(start, speed, Sprite::PROJECTILE);
 	return projectile;
 }

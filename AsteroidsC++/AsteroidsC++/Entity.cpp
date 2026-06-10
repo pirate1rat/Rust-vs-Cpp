@@ -2,7 +2,6 @@
 
 Entity::Entity(Sprite spriteEnum) {
 	this->prefab = &SPRITES[spriteEnum];
-	this->directionUnitVec = Vector2{ 0.0f, -1.0f };
 }
 
 void Entity::draw() {
@@ -17,6 +16,7 @@ void Entity::rotate(float rotationDirection, float deltaTime) {
 	float r = rotationUnit * rotationDirection * deltaTime;
 	rotation += r;
 	directionUnitVec = Vector2Rotate(directionUnitVec, r);
+	velocityVec = Vector2Rotate(velocityVec, r);
 }
 
 void Entity::move(float deltaTime) {

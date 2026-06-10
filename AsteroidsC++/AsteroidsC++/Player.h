@@ -6,18 +6,16 @@
 class Player : public Entity
 {
 private:
-	Vector2 directionUnitVec;
-	const float rotationUnit = 2.0f;
-	const float maxMovementVecLength = 300.0f;
-	const float acceleration = 300.0f;
+	const float rotationUnit = PLAYER_ROTATION_UNIT;
+	const float maxMovementVecLength = PLAYER_MAX_SPEED;
+	const float acceleration = PLAYER_ACCELERATION;
 	float accelerationDirection = FORWARD;
 public:
 
 private:
 public:
 	Player(Vector2 center, Sprite spriteEnum);
-	void rotate(float rotationDirection, float deltaTime);
 	void changeVelocity(float accelerationDirection, float deltaTime);
-	std::unique_ptr<Projectile> createProjectile();
+	std::unique_ptr<Projectile> shootProjectile();
 };
 
