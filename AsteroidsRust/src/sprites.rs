@@ -1,6 +1,7 @@
 use ggez::glam::{Mat2, Vec2};
 use rand::Rng;
 
+#[derive(Debug)]
 pub struct SpriteStruct {
     pub g_points: &'static [Vec2],
     pub h_points: &'static [Vec2],
@@ -9,17 +10,16 @@ pub struct SpriteStruct {
 #[repr(usize)]
 #[derive(Clone)]
 pub enum SpriteType {
-    PLAYER = 0,
-    ASTEROID_SMALL_1,
-    ASTEROID_SMALL_2,
-    ASTEROID_MEDIUM_1,
-    ASTEROID_MEDIUM_2,
-    ASTEROID_MEDIUM_3,
-    ASTEROID_BIG_1,
-    ASTEROID_BIG_2,
-    ASTEROID_BIG_3,
-    PROJECTILE,
-    ENUM_LENGTH
+    Player = 0,
+    AsteroidSmall1,
+    AsteroidSmall2,
+    AsteroidMedium1,
+    AsteroidMedium2,
+    AsteroidMedium3,
+    AsteroidBig1,
+    AsteroidBig2,
+    AsteroidBig3,
+    Projectile,
 }
 
 impl SpriteType {

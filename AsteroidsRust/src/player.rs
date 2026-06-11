@@ -1,9 +1,10 @@
-use crate::entity::Entity;
+use crate::entity::{Entity, GameEntity};
 use ggez::glam::{Vec2};
 use crate::constants::*;
 use crate::projectile::Projectile;
-use crate::sprites::{SpriteType};
+use crate::sprites::{SpriteType, SPRITES};
 
+#[derive(Debug)]
 pub struct Player{
     pub entity: Entity,
     max_movement_vec_length: f32,
@@ -11,19 +12,28 @@ pub struct Player{
     acceleration_direction: f32
 }
 
+impl GameEntity for Player {
+    fn entity(&self) -> &Entity {
+        &self.entity
+    }
+
+    fn entity_mut(&mut self) -> &mut Entity {
+        &mut self.entity
+    }
+}
+
 impl Player{
     pub fn new(window_center: Vec2, sprite: SpriteType) -> Player {
-        let mut ent = Entity::new(sprite);
-        ent.position = Vec2{ x: 0.0, y: -2.5};
-
-        let mut player = Player {
-            entity: ent,
+        Player {
+            entity: Entity {
+                prefab: &SPRITES[SpriteType::Player.idx()],
+                position: window_center + Vec2 { x: 0.0, y: -2.5 },
+                ..Default::default()
+            },
             max_movement_vec_length: PLAYER_MAX_SPEED,
             acceleration: PLAYER_ACCELERATION,
-            acceleration_direction: FORWARD
-        };
-        player.entity.reposition(window_center);
-        player
+            acceleration_direction: FORWARD,
+        }
     }
 
     pub fn change_velocity(&mut self, acceleration_direction: f32, delta_time: f32) {
@@ -49,9 +59,6 @@ impl Player{
     pub fn shoot_projectile(&self) -> Projectile {
         let start = self.entity.position + self.entity.direction_unit_vec * PROJECTILE_START_OFFSET;
         let speed = self.entity.direction_unit_vec * PROJECTILE_SPEED;
-        let mut projectile = Projectile{ entity: Entity::new(SpriteType::PROJECTILE) };
-        projectile.entity.position = start;
-        projectile.entity.movement_vec = speed;
-        projectile
+        Projectile::new(start, speed)
     }
 }

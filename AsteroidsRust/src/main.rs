@@ -14,9 +14,7 @@ use ggez::conf::WindowMode;
 use ggez::event::{self, EventHandler};
 use rand::Rng;
 use game::Game;
-
-const WINDOW_WIDTH: f32 = 800.0;
-const WINDOW_HEIGHT: f32 = 600.0;
+use constants::*;
 
 fn main() {
     let (mut ctx, event_loop) = ContextBuilder::new("my_game", "Cool Game Author")

@@ -11,7 +11,7 @@ pub fn check_collision(prefab_a: &SpriteStruct, pos_a: Vec2, rot_a: f32,
         let a: Vec2 = transform(prefab_a.h_points[i], pos_a, rot_a);
         let b: Vec2 = transform(prefab_a.h_points[(i+1)%self_length], pos_a, rot_a);
         for (j, _) in prefab_b.h_points.iter().enumerate() {
-            let c: Vec2 = transform(prefab_b.h_points[i], pos_b, rot_b);
+            let c: Vec2 = transform(prefab_b.h_points[j], pos_b, rot_b);
             let d: Vec2 = transform(prefab_b.h_points[(j+1)%other_length], pos_b, rot_b);
 
             let d1 = cross(a, b, c);

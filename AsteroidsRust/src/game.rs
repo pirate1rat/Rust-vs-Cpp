@@ -10,6 +10,7 @@ use crate::constants::{BACKWARD, FORWARD, LEFT, MAX_ASTEROIDS, PLAYER_SHOT_TIMER
 use crate::player::Player;
 use crate::sprites::{SpriteType, SPRITES};
 use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
+use crate::entity::GameEntity;
 use crate::projectile::Projectile;
 
 pub struct Game {
@@ -39,7 +40,7 @@ impl Game {
         Game {
             player: Player::new(
                 Vec2{x: WINDOW_WIDTH/2.0, y: WINDOW_HEIGHT/2.0},
-                SpriteType::PLAYER
+                SpriteType::Player
             ),
             asteroids,
             projectiles: Vec::new(),
@@ -47,76 +48,89 @@ impl Game {
             shot_timer: 0.0,
         }
     }
-}
 
-impl EventHandler for Game {
-    fn update(&mut self, _ctx: &mut Context) -> GameResult {
-        let dt = _ctx.time.delta().as_secs_f32();
-        self.shot_timer -= dt;
+    fn update_entities(&mut self, delta_time: f32) -> GameResult {
+        for asteroid in self.asteroids.iter_mut() {
+            asteroid.move_entity(delta_time);
+        }
+        for projectile in self.projectiles.iter_mut() {
+            projectile.move_entity(delta_time);
+        }
+        self.player.move_entity(delta_time);
+        Ok(())
+    }
 
-        if _ctx.keyboard.is_key_pressed(KeyCode::Up) {
-            self.player.change_velocity(FORWARD, dt);
+    fn handle_input(&mut self, ctx: &mut Context, delta_time: f32) -> GameResult {
+        if ctx.keyboard.is_key_pressed(KeyCode::Up) {
+            self.player.change_velocity(FORWARD, delta_time);
         }
-        if _ctx.keyboard.is_key_pressed(KeyCode::Down) {
-            self.player.change_velocity(BACKWARD, dt);
+        if ctx.keyboard.is_key_pressed(KeyCode::Down) {
+            self.player.change_velocity(BACKWARD, delta_time);
         }
-        if _ctx.keyboard.is_key_pressed(KeyCode::Left) {
-            self.player.entity.rotate(LEFT, dt);
+        if ctx.keyboard.is_key_pressed(KeyCode::Left) {
+            self.player.rotate(LEFT, delta_time);
         }
-        if _ctx.keyboard.is_key_pressed(KeyCode::Right) {
-            self.player.entity.rotate(RIGHT, dt);
+        if ctx.keyboard.is_key_pressed(KeyCode::Right) {
+            self.player.rotate(RIGHT, delta_time);
         }
-        if _ctx.keyboard.is_key_pressed(KeyCode::Space) && self.shot_timer <= 0f32 {
+        if ctx.keyboard.is_key_pressed(KeyCode::Space) && self.shot_timer <= 0f32 {
             self.shot_timer = PLAYER_SHOT_TIMER;
             self.projectiles.push(self.player.shoot_projectile());
             println!("piuu\n");
         }
+        Ok(())
+    }
 
-        //updating entities
-        for mut asteroid in self.asteroids.iter_mut() {
-            asteroid.entity.move_entity(dt);
-        }
-        for mut projectile in self.projectiles.iter_mut() {
-            projectile.move_entity(dt);
-        }
-        self.player.entity.move_entity(dt);
-
-        //checking collision
+    fn handle_collision(&mut self) -> GameResult {
         for asteroid in self.asteroids.iter() {
-            if self.player.entity.check_collision(&asteroid.entity) {
+            if self.player.check_collision(asteroid) {
                 println!("kolizja! {:?}", asteroid.entity.position);
             }
         }
         let mut new_asteroids: Vec<Asteroid> = Vec::new();
-        for mut projectile in self.projectiles.iter_mut(){
-            for mut asteroid in self.asteroids.iter_mut(){
-                if projectile.entity.check_collision(&asteroid.entity) {
+        for projectile in self.projectiles.iter_mut(){
+            for asteroid in self.asteroids.iter_mut(){
+                if projectile.check_collision(asteroid) {
                     projectile.entity.alive = false;
-                    let split_asteroid = asteroid.split(&mut self.rng);
-                    if split_asteroid.is_some() {
-                        new_asteroids.push(split_asteroid.unwrap());
+                    if let Some(asteroid) = asteroid.split(&mut self.rng) {
+                        new_asteroids.push(asteroid);
                     }
                 }
             }
         }
         self.asteroids.extend(new_asteroids);
+        Ok(())
+    }
 
-        //clearing
-        self.asteroids.retain(|asteroid| asteroid.entity.alive);
-        self.projectiles.retain(|projectile| projectile.entity.alive);
+    fn cleanup(&mut self) -> GameResult {
+        self.asteroids.retain(|asteroid| asteroid.is_alive());
+        self.projectiles.retain(|projectile| projectile.is_alive());
+        Ok(())
+    }
+}
+
+impl EventHandler for Game {
+    fn update(&mut self, ctx: &mut Context) -> GameResult {
+        let dt = ctx.time.delta().as_secs_f32();
+        self.shot_timer -= dt;
+
+        self.handle_input(ctx, dt)?;
+        self.update_entities(dt)?;
+        self.handle_collision()?;
+        self.cleanup()?;
 
         Ok(())
     }
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
         let mut canvas = graphics::Canvas::from_frame(ctx, Color::BLACK);
-        self.player.entity.draw(ctx, &mut canvas).expect("TODO: panic message");
+        self.player.draw(ctx, &mut canvas)?;
 
         for asteroid in self.asteroids.iter() {
-            asteroid.entity.draw(ctx, &mut canvas).expect("TODO: panic message");
+            asteroid.draw(ctx, &mut canvas)?;
         }
         for projectile in self.projectiles.iter() {
-            projectile.entity.draw(ctx, &mut canvas).expect("TODO: panic message");
+            projectile.draw(ctx, &mut canvas)?;
         }
 
         canvas.finish(ctx)?;

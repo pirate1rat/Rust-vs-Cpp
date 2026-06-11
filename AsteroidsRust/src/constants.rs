@@ -1,10 +1,10 @@
 use ggez::glam::Vec2;
 
-pub const WINDOW_WIDTH: i32 = 800;
-pub const WINDOW_HEIGHT: i32 = 600;
-pub const MARGIN: i32 = 30;
+pub const WINDOW_WIDTH: f32 = 800.0;
+pub const WINDOW_HEIGHT: f32 = 600.0;
+pub const MARGIN: f32 = 30.0;
 
-pub const SPAWNPOINT_SAFEZONE: i32 = 150; // spawnpoint for player
+pub const SPAWNPOINT_SAFEZONE: f32 = 150.0; // spawnpoint for player
 
 pub const MAX_ASTEROIDS: usize = 7;
 pub const MIN_ASTEROID_VELOCITY: f32 = 40.0;
