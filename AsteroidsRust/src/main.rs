@@ -1,3 +1,6 @@
+mod app;
+mod playing_state;
+mod menu_state;
 mod player;
 mod entity;
 mod sprites;
@@ -6,14 +9,12 @@ mod asteroid;
 mod renderer;
 mod collision_checker;
 mod utils;
-mod game;
 mod projectile;
 
+use crate::app::App;
 use ggez::{ContextBuilder};
 use ggez::conf::WindowMode;
 use ggez::event::{self, EventHandler};
-use rand::Rng;
-use game::Game;
 use constants::*;
 
 fn main() {
@@ -26,6 +27,6 @@ fn main() {
         .build()
         .expect("aieee, could not create ggez context!");
 
-    let game = Game::new(&mut ctx);
-    event::run(ctx, event_loop, game);
+    let app = App::new(&mut ctx);
+    event::run(ctx, event_loop, app);
 }
