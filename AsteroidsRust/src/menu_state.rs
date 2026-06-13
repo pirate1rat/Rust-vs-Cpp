@@ -42,7 +42,8 @@ impl MenuState {
             }
         }
 
-        if ctx.keyboard.is_key_just_pressed(KeyCode::Space) {
+        if ctx.keyboard.is_key_just_pressed(KeyCode::Space)
+            || ctx.keyboard.is_key_just_pressed(KeyCode::Return) {
             return match self.current_option {
                 MenuOption::Play => { Transition::ToState(GameState::Playing(PlayingState::new(ctx))) }
                 MenuOption::Scores => { Transition::None }

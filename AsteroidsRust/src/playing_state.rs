@@ -7,13 +7,14 @@ use ggez::input::keyboard::KeyCode;
 
 use rand::prelude::ThreadRng;
 use rand::Rng;
-use crate::app::Transition;
+use crate::app::{GameState, Transition};
 use crate::asteroid::{Asteroid, AsteroidSize, ASTEROID_TYPES};
 use crate::constants::*;
 use crate::player::Player;
 use crate::sprites::{SpriteType, SPRITES};
 use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::entity::GameEntity;
+use crate::name_entry_state::NameEntryState;
 use crate::projectile::Projectile;
 
 pub struct PlayingState {
@@ -91,12 +92,13 @@ impl PlayingState {
         //Ok(())
     }
 
-    fn handle_collision(&mut self) {
+    fn handle_collision(&mut self) -> bool {
         for asteroid in self.asteroids.iter() {
             if self.player.check_collision(asteroid) && self.inviolability_timer <= 0f32 {
                 println!("kolizja! {:?}", asteroid.entity.position);
                 if self.extra_lifes == 0 {
-                    println!("porazka!")
+                    println!("porazka!");
+                    return true
                 }
                 else {
                     self.extra_lifes -= 1;
@@ -123,6 +125,7 @@ impl PlayingState {
             }
         }
         self.asteroids.extend(new_asteroids);
+        false
         //Ok(())
     }
 
@@ -139,7 +142,9 @@ impl PlayingState {
 
         self.handle_input(ctx, dt);
         self.update_entities(dt);
-        self.handle_collision();
+        if self.handle_collision() {
+            return Transition::ToState(GameState::NameEntry(NameEntryState::new(), self.points))
+        }
         self.cleanup();
 
         Transition::None
@@ -164,9 +169,7 @@ impl PlayingState {
         canvas.draw(&points_text, DrawParam::default().dest([WINDOW_WIDTH - x - 20.0, 20.0]));
 
         canvas.finish(ctx);
-
-
-
+        
         //Ok(())
     }
 }

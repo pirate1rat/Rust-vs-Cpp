@@ -1,6 +1,7 @@
 mod app;
 mod playing_state;
 mod menu_state;
+mod name_entry_state;
 mod player;
 mod entity;
 mod sprites;
