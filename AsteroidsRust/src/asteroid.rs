@@ -10,23 +10,32 @@ static MEDIUM_SPLIT_INTO: [i32; 2] = [ 6, 7 ]; // indexes for small
 
 pub struct AsteroidType {
     sprite: SpriteType,
+    size: AsteroidSize,
     split_into: Option<&'static [i32]>,
 }
 
+#[derive(Debug, Clone)]
+pub enum AsteroidSize{
+    Big,
+    Medium,
+    Small
+}
+
 pub static ASTEROID_TYPES: [AsteroidType; 8] = [
-    AsteroidType { sprite: SpriteType::AsteroidBig1,    split_into: Some(&BIG_SPLIT_INTO) },
-    AsteroidType { sprite: SpriteType::AsteroidBig2,    split_into: Some(&BIG_SPLIT_INTO) },
-    AsteroidType { sprite: SpriteType::AsteroidBig3,    split_into: Some(&BIG_SPLIT_INTO) },
-    AsteroidType { sprite: SpriteType::AsteroidMedium1, split_into: Some(&MEDIUM_SPLIT_INTO) },
-    AsteroidType { sprite: SpriteType::AsteroidMedium2, split_into: Some(&MEDIUM_SPLIT_INTO) },
-    AsteroidType { sprite: SpriteType::AsteroidMedium3, split_into: Some(&MEDIUM_SPLIT_INTO) },
-    AsteroidType { sprite: SpriteType::AsteroidSmall1,  split_into: None },
-    AsteroidType { sprite: SpriteType::AsteroidSmall2,  split_into: None },
+    AsteroidType { sprite: SpriteType::AsteroidBig1,    size: AsteroidSize::Big, split_into: Some(&BIG_SPLIT_INTO) },
+    AsteroidType { sprite: SpriteType::AsteroidBig2,    size: AsteroidSize::Big, split_into: Some(&BIG_SPLIT_INTO) },
+    AsteroidType { sprite: SpriteType::AsteroidBig3,    size: AsteroidSize::Big, split_into: Some(&BIG_SPLIT_INTO) },
+    AsteroidType { sprite: SpriteType::AsteroidMedium1, size: AsteroidSize::Medium, split_into: Some(&MEDIUM_SPLIT_INTO) },
+    AsteroidType { sprite: SpriteType::AsteroidMedium2, size: AsteroidSize::Medium, split_into: Some(&MEDIUM_SPLIT_INTO) },
+    AsteroidType { sprite: SpriteType::AsteroidMedium3, size: AsteroidSize::Medium, split_into: Some(&MEDIUM_SPLIT_INTO) },
+    AsteroidType { sprite: SpriteType::AsteroidSmall1,  size: AsteroidSize::Small, split_into: None },
+    AsteroidType { sprite: SpriteType::AsteroidSmall2,  size: AsteroidSize::Small, split_into: None },
 ];
 
 #[derive(Debug)]
 pub struct Asteroid {
     type_idx: usize,
+    pub size: AsteroidSize,
     pub entity: Entity,
 }
 
@@ -70,6 +79,7 @@ impl Asteroid {
 
         Asteroid {
             type_idx,
+            size: ASTEROID_TYPES[type_idx].size.clone(),
             entity: ent,
         }
     }

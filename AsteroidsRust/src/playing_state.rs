@@ -8,8 +8,8 @@ use ggez::input::keyboard::KeyCode;
 use rand::prelude::ThreadRng;
 use rand::Rng;
 use crate::app::Transition;
-use crate::asteroid::{Asteroid, ASTEROID_TYPES};
-use crate::constants::{BACKWARD, FORWARD, LEFT, MAX_ASTEROIDS, PLAYER_SHOT_TIMER, RIGHT};
+use crate::asteroid::{Asteroid, AsteroidSize, ASTEROID_TYPES};
+use crate::constants::*;
 use crate::player::Player;
 use crate::sprites::{SpriteType, SPRITES};
 use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
@@ -22,6 +22,8 @@ pub struct PlayingState {
     projectiles: Vec<Projectile>,
     rng: ThreadRng,
     shot_timer: f32,
+    inviolability_timer: f32,
+    
     points: i32,
     extra_lifes: i32,
 }
@@ -51,6 +53,7 @@ impl PlayingState {
             projectiles: Vec::new(),
             rng,
             shot_timer: 0.0,
+            inviolability_timer: 0.0,
             points: 0,
             extra_lifes: 2,
         }
@@ -90,13 +93,14 @@ impl PlayingState {
 
     fn handle_collision(&mut self) {
         for asteroid in self.asteroids.iter() {
-            if self.player.check_collision(asteroid) {
+            if self.player.check_collision(asteroid) && self.inviolability_timer <= 0f32 {
                 println!("kolizja! {:?}", asteroid.entity.position);
                 if self.extra_lifes == 0 {
                     println!("porazka!")
                 }
                 else {
                     self.extra_lifes -= 1;
+                    self.inviolability_timer = PLAYER_INVIOLABILITY_TIMER;
                     self.player.respawn();
                 }
             }
@@ -105,6 +109,12 @@ impl PlayingState {
         for projectile in self.projectiles.iter_mut(){
             for asteroid in self.asteroids.iter_mut(){
                 if projectile.check_collision(asteroid) {
+                    match asteroid.size {
+                        AsteroidSize::Big => { self.points += 10 }
+                        AsteroidSize::Medium => { self.points += 15 }
+                        AsteroidSize::Small => { self.points += 20 }
+                    }
+                    
                     projectile.entity.alive = false;
                     if let Some(asteroid) = asteroid.split(&mut self.rng) {
                         new_asteroids.push(asteroid);
@@ -125,6 +135,7 @@ impl PlayingState {
     pub fn update(&mut self, ctx: &mut Context) -> Transition {
         let dt = ctx.time.delta().as_secs_f32();
         self.shot_timer -= dt;
+        self.inviolability_timer -= dt;
 
         self.handle_input(ctx, dt);
         self.update_entities(dt);

@@ -5,6 +5,7 @@ use ggez::input::keyboard::KeyCode;
 use crate::app::{Transition, GameState};
 use crate::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::playing_state::PlayingState;
+use crate::renderer::draw_option;
 
 #[derive(Eq, PartialEq)]
 enum MenuOption{
@@ -52,31 +53,6 @@ impl MenuState {
         Transition::None
     }
 
-    fn draw_option(ctx: &mut Context, canvas: &mut graphics::Canvas, label: &str, y: f32, selected: bool) {
-        let text = Text::new(TextFragment::new(label).scale(36.0));
-        let dims = text.measure(ctx).unwrap();
-        let text_width = dims.x;
-        let text_height = dims.y;
-
-        let x = (WINDOW_WIDTH - text_width) / 2.0;
-
-        canvas.draw(&text, DrawParam::default().dest([x, y]));
-
-        if selected {
-            let padding_x = 12.0;
-            let padding_y = 8.0;
-            let rect = Rect::new(
-                x - padding_x,
-                y - padding_y,
-                text_width + padding_x * 2.0,
-                text_height + padding_y * 2.0,
-            );
-
-            let border = Mesh::new_rectangle(ctx, DrawMode::stroke(2.0), rect, Color::WHITE).unwrap();
-            canvas.draw(&border, DrawParam::default());
-        }
-    }
-
     pub fn draw(&mut self, ctx: &mut Context) {
         let mut canvas = graphics::Canvas::from_frame(ctx, Color::BLACK);
 
@@ -87,7 +63,7 @@ impl MenuState {
 
         canvas.draw(&game_title, DrawParam::default().dest([x, y]));
 
-        Self::draw_option(
+        draw_option(
             ctx,
             &mut canvas,
             "Play",
@@ -95,7 +71,7 @@ impl MenuState {
             self.current_option == MenuOption::Play,
         );
 
-        Self::draw_option(
+        draw_option(
             ctx,
             &mut canvas,
             "Scores",
@@ -103,7 +79,7 @@ impl MenuState {
             self.current_option == MenuOption::Scores,
         );
 
-        Self::draw_option(
+        draw_option(
             ctx,
             &mut canvas,
             "Demo",

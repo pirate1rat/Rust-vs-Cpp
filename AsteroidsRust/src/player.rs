@@ -30,6 +30,7 @@ impl Player{
             entity: Entity {
                 prefab: &SPRITES[SpriteType::Player.idx()],
                 position: window_center + Vec2 { x: 0.0, y: -2.5 },
+                rotation_unit: PLAYER_ROTATION_UNIT,
                 ..Default::default()
             },
             max_movement_vec_length: PLAYER_MAX_SPEED,

@@ -25,7 +25,7 @@ impl Default for Entity {
             prefab: &SPRITES[SpriteType::Player.idx()], // placeholder
             direction_unit_vec: DEFAULT_UNIT_VECTOR,
             movement_vec: Vec2::ZERO,
-            position: Vec2::ZERO,
+            position: DEFAULT_POSITION,
             rotation: 0.0,
             rotation_unit: DEFAULT_ROTATION_UNIT,
             alive: true,

@@ -1,5 +1,4 @@
 use ggez::glam::{Mat2, Vec2};
-use rand::Rng;
 
 #[derive(Debug)]
 pub struct SpriteStruct {

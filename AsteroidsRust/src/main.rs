@@ -18,7 +18,7 @@ use ggez::event::{self, EventHandler};
 use constants::*;
 
 fn main() {
-    let (mut ctx, event_loop) = ContextBuilder::new("my_game", "Cool Game Author")
+    let (mut ctx, event_loop) = ContextBuilder::new("AsteroidsRust", "pirate1rat")
         .window_mode(WindowMode {
             width: WINDOW_WIDTH,
             height: WINDOW_HEIGHT,
