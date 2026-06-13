@@ -9,7 +9,9 @@ pub struct Player{
     pub entity: Entity,
     max_movement_vec_length: f32,
     acceleration: f32,
-    acceleration_direction: f32
+    acceleration_direction: f32,
+    ////
+    start_position: Vec2
 }
 
 impl GameEntity for Player {
@@ -33,6 +35,7 @@ impl Player{
             max_movement_vec_length: PLAYER_MAX_SPEED,
             acceleration: PLAYER_ACCELERATION,
             acceleration_direction: FORWARD,
+            start_position: window_center + Vec2 { x: 0.0, y: -2.5 }
         }
     }
 
@@ -60,5 +63,12 @@ impl Player{
         let start = self.entity.position + self.entity.direction_unit_vec * PROJECTILE_START_OFFSET;
         let speed = self.entity.direction_unit_vec * PROJECTILE_SPEED;
         Projectile::new(start, speed)
+    }
+
+    pub fn respawn(&mut self) {
+        self.entity.position = self.start_position;
+        self.entity.movement_vec = Vec2::ZERO;
+        self.entity.direction_unit_vec = DEFAULT_UNIT_VECTOR;
+        self.entity.rotation = 0.0;
     }
 }

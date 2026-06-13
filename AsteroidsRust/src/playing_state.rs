@@ -1,8 +1,10 @@
+use std::fmt::format;
 use ggez::{graphics, Context, GameResult};
 use ggez::event::EventHandler;
 use ggez::glam::Vec2;
-use ggez::graphics::Color;
+use ggez::graphics::{Color, DrawParam, Text, TextFragment};
 use ggez::input::keyboard::KeyCode;
+
 use rand::prelude::ThreadRng;
 use rand::Rng;
 use crate::app::Transition;
@@ -19,7 +21,9 @@ pub struct PlayingState {
     asteroids: Vec<Asteroid>,
     projectiles: Vec<Projectile>,
     rng: ThreadRng,
-    shot_timer: f32
+    shot_timer: f32,
+    points: i32,
+    extra_lifes: i32,
 }
 
 impl PlayingState {
@@ -47,6 +51,8 @@ impl PlayingState {
             projectiles: Vec::new(),
             rng,
             shot_timer: 0.0,
+            points: 0,
+            extra_lifes: 2,
         }
     }
 
@@ -86,6 +92,13 @@ impl PlayingState {
         for asteroid in self.asteroids.iter() {
             if self.player.check_collision(asteroid) {
                 println!("kolizja! {:?}", asteroid.entity.position);
+                if self.extra_lifes == 0 {
+                    println!("porazka!")
+                }
+                else {
+                    self.extra_lifes -= 1;
+                    self.player.respawn();
+                }
             }
         }
         let mut new_asteroids: Vec<Asteroid> = Vec::new();
@@ -133,7 +146,15 @@ impl PlayingState {
             projectile.draw(ctx, &mut canvas);
         }
 
+        let lifes_text = Text::new(TextFragment::new(format!("extra lifes: {}", self.extra_lifes)).scale(20.0));
+        let points_text = Text::new(TextFragment::new(format!("points: {}", self.points)).scale(20.0));
+        let x = points_text.measure(ctx).unwrap().x;
+        canvas.draw(&lifes_text, DrawParam::default().dest([20.0, 20.0]));
+        canvas.draw(&points_text, DrawParam::default().dest([WINDOW_WIDTH - x - 20.0, 20.0]));
+
         canvas.finish(ctx);
+
+
 
         //Ok(())
     }
