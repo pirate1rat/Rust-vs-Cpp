@@ -1,3 +1,5 @@
+use std::io::Write;
+use std::fs::OpenOptions;
 use ggez::{graphics, Context};
 use ggez::graphics::{Color, DrawParam, Text, TextFragment};
 use ggez::input::keyboard::KeyCode;
@@ -31,8 +33,7 @@ impl NameEntryState {
             self.name.pop();
         }
 
-        if ctx.keyboard.is_key_just_pressed(KeyCode::Return) {
-            //self.save_score();
+        if ctx.keyboard.is_key_just_pressed(KeyCode::Return) && self.save_score(score.clone()){
             return Transition::ToState(GameState::Menu(MenuState::new()));
         }
 
@@ -70,5 +71,20 @@ impl NameEntryState {
         if self.name.len() < 12 {
             self.name.push(character);
         }
+    }
+
+    fn save_score(&self, score: i32) -> bool {
+        if self.name.trim().is_empty() {
+            return false;
+        }
+
+        if let Ok(mut file) = OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open("scores.txt")
+        {
+            let _ = writeln!(file, "{};{};", self.name.trim(), score);
+        }
+        true
     }
 }

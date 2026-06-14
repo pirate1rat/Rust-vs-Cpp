@@ -2,6 +2,7 @@ mod app;
 mod playing_state;
 mod menu_state;
 mod name_entry_state;
+mod scores_state;
 mod player;
 mod entity;
 mod sprites;
@@ -11,6 +12,7 @@ mod renderer;
 mod collision_checker;
 mod utils;
 mod projectile;
+
 
 use crate::app::App;
 use ggez::{ContextBuilder};

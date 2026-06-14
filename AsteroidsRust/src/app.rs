@@ -8,11 +8,13 @@ use crate::constants::*;
 use crate::playing_state::PlayingState;
 use crate::menu_state::MenuState;
 use crate::name_entry_state::NameEntryState;
+use crate::scores_state::ScoresState;
 
 pub enum GameState {
     Menu(MenuState),
     Playing(PlayingState),
     NameEntry(NameEntryState, i32),
+    DisplayScores(ScoresState)
     //GameOver(GameOverState),
 }
 
@@ -40,6 +42,7 @@ impl EventHandler for App {
                 GameState::Menu(s) => s.update(ctx),
                 GameState::Playing(s) => s.update(ctx),
                 GameState::NameEntry(s, score) => s.update(ctx, score),
+                GameState::DisplayScores(s) => s.update(ctx),
                 //GameState::GameOver(s) => s.update(ctx),
             };
 
@@ -56,6 +59,7 @@ impl EventHandler for App {
             GameState::Menu(s) => s.draw(ctx),
             GameState::Playing(s) => s.draw(ctx),
             GameState::NameEntry(s, score) => s.draw(ctx, score),
+            GameState::DisplayScores(s) => s.draw(ctx)?,
             //GameState::GameOver(s) => s.draw(ctx),
         }
         

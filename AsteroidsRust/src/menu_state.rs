@@ -3,9 +3,11 @@ use ggez::{graphics, Context};
 use ggez::graphics::{Color, DrawMode, DrawParam, Mesh, Rect, Text, TextFragment};
 use ggez::input::keyboard::KeyCode;
 use crate::app::{Transition, GameState};
+use crate::app::GameState::DisplayScores;
 use crate::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::playing_state::PlayingState;
 use crate::renderer::draw_option;
+use crate::scores_state::ScoresState;
 
 #[derive(Eq, PartialEq)]
 enum MenuOption{
@@ -46,7 +48,7 @@ impl MenuState {
             || ctx.keyboard.is_key_just_pressed(KeyCode::Return) {
             return match self.current_option {
                 MenuOption::Play => { Transition::ToState(GameState::Playing(PlayingState::new(ctx))) }
-                MenuOption::Scores => { Transition::None }
+                MenuOption::Scores => { Transition::ToState(GameState::DisplayScores(ScoresState::new())) }
                 MenuOption::Demo => { Transition::None }
             };
         }

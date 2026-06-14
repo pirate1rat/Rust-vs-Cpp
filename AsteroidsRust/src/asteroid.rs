@@ -69,8 +69,8 @@ impl Asteroid {
                 y: rng.random_range(0.0..WINDOW_HEIGHT)
             };
 
-            if ((spawn_point.x <= WINDOW_WIDTH/2.0 - SPAWNPOINT_SAFEZONE) || (WINDOW_WIDTH/2.0 - SPAWNPOINT_SAFEZONE <= spawn_point.x))
-                && ((spawn_point.y <= WINDOW_WIDTH/2.0 - SPAWNPOINT_SAFEZONE) || (WINDOW_WIDTH/2.0 - SPAWNPOINT_SAFEZONE <= spawn_point.y)) {
+            if ((spawn_point.x <= WINDOW_WIDTH/2.0 - SPAWNPOINT_SAFEZONE) || (WINDOW_WIDTH/2.0 + SPAWNPOINT_SAFEZONE <= spawn_point.x))
+                && ((spawn_point.y <= WINDOW_WIDTH/2.0 - SPAWNPOINT_SAFEZONE) || (WINDOW_WIDTH/2.0 + SPAWNPOINT_SAFEZONE <= spawn_point.y)) {
                 break;
             }
         }
