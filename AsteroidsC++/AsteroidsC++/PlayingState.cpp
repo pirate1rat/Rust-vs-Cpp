@@ -1,6 +1,6 @@
-#include "Game.h"
+#include "PlayingState.h"
 
-Game::Game() : player(Vector2{ WINDOW_WIDTH / 2 , WINDOW_HEIGHT / 2 }, Sprite::PLAYER) {
+PlayingState::PlayingState() : player(Vector2{ WINDOW_WIDTH / 2 , WINDOW_HEIGHT / 2 }, Sprite::PLAYER) {
     int numOfAsteroids = (rand() % MAX_ASTEROIDS) + 4;
 
     for (int i = 0; i < numOfAsteroids; i++) {
@@ -9,19 +9,19 @@ Game::Game() : player(Vector2{ WINDOW_WIDTH / 2 , WINDOW_HEIGHT / 2 }, Sprite::P
     }
 }
 
-void Game::run() {
-    while (!WindowShouldClose()) {
-        float deltaTime = GetFrameTime();
-        handleInput(deltaTime);
-        update(deltaTime);
-        clear();
-        checkCollisions();
-        draw();
+void PlayingState::update(App& app, float deltaTime) {
+    handleInput(deltaTime);
+    updateEntities(deltaTime);
+    if (checkCollisions()) {
+        app.changeState(std::make_unique<NameEntryState>(points));
+        return;
     }
+    clear();
 }
 
-void Game::handleInput(float deltaTime) {
+void PlayingState::handleInput(float deltaTime) {
     shotTimer -= deltaTime;
+    inviolabilityTimer -= deltaTime;
 
     if (IsKeyDown(KEY_UP)) {
         player.changeVelocity(FORWARD, deltaTime);
@@ -37,12 +37,11 @@ void Game::handleInput(float deltaTime) {
     }
     if (IsKeyPressed(KEY_SPACE) && shotTimer <= 0) {
         shotTimer = PLAYER_SHOT_TIMER;
-        std::cout << "piuu!\n";
         projectiles.push_back(player.shootProjectile());
     }
 }
 
-void Game::update(float deltaTime) {
+void PlayingState::updateEntities(float deltaTime) {
     for (auto& asteroid : asteroids) {
         asteroid->move(deltaTime);
     }
@@ -52,11 +51,17 @@ void Game::update(float deltaTime) {
     player.move(deltaTime);
 }
 
-void Game::checkCollisions() {
+bool PlayingState::checkCollisions() {
     for (auto& asteroid : asteroids) {
-        if (player.checkCollision(*asteroid)) {
-            std::cout << "kolizja! " << asteroid->getPosition().x << " " << asteroid->getPosition().y << std::endl;
-            break;
+        if (player.checkCollision(*asteroid) && inviolabilityTimer <= 0) {
+            if (extraLives == 0) {
+                return true;
+            }
+            else {
+                extraLives -= 1;
+                inviolabilityTimer = PLAYER_INVIOLABILITY_TIMER;
+                player.respawn();
+            }
         }
     }
 
@@ -66,6 +71,18 @@ void Game::checkCollisions() {
             if (!asteroid) continue;
 
             if (projectile->checkCollision(*asteroid)) {
+                switch (asteroid->size) {
+                case AsteroidSize::BIG:
+                    points += 10;
+                    break;
+                case AsteroidSize::MEDIUM:
+                    points += 15;
+                    break;
+                case AsteroidSize::SMALL:
+                    points += 20;
+                    break;
+                }
+
                 projectile->alive = false;
 
                 auto splitAst = asteroid->split();
@@ -76,9 +93,11 @@ void Game::checkCollisions() {
     }
     for (auto& a : newAsteroids)
         asteroids.push_back(std::move(a));
+
+    return false;
 }
 
-void Game::clear() {
+void PlayingState::clear() {
     std::erase_if(asteroids, [](const auto& asteroid) {
         return asteroid == nullptr || !asteroid->alive;
         });
@@ -87,9 +106,7 @@ void Game::clear() {
         });
 }
 
-void Game::draw() {
-    BeginDrawing();
-    ClearBackground(BLACK);
+void PlayingState::draw() {
     player.draw();
     for (auto& asteroid : asteroids) {
         asteroid->draw();
@@ -97,5 +114,4 @@ void Game::draw() {
     for (auto& projectile : projectiles) {
         projectile->draw();
     }
-    EndDrawing();
 }

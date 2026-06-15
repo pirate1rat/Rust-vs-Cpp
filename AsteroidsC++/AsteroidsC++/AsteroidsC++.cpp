@@ -1,14 +1,15 @@
 ﻿#include <raylib.h>
 #include <time.h>
-#include "Game.h"
+#include "App.h"
+#include "Constants.h"
 
 int main() {
     srand(time(NULL));
-    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Asteroids C++");
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "AsteroidsC++");
     SetTargetFPS(120);
 
-    Game game;
-    game.run();
+    App app;
+    app.run();
 
     CloseWindow();
 }

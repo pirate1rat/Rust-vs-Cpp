@@ -6,7 +6,7 @@
 enum AsteroidSize
 {
 	NONE,
-	SMALL,
+	SMALL, //SMOL
 	MEDIUM,
 	BIG
 };
@@ -37,6 +37,8 @@ class Asteroid : public Entity
 {
 private:
 	int typeIdx;
+public:
+	AsteroidSize size;
 
 public:
 	Asteroid(int typeIdx);

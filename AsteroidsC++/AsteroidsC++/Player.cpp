@@ -4,6 +4,7 @@
 
 Player::Player(Vector2 windowCenter, Sprite spriteEnum) : Entity(spriteEnum){
 	position = Vector2{ 0.0f, 2.5f }; //center of gravity
+	startPosition = windowCenter;
 	reposition(windowCenter);
 }
 
@@ -31,4 +32,11 @@ std::unique_ptr<Projectile> Player::shootProjectile() {
 	Vector2 speed = Vector2Scale(directionUnitVec, PROJECTILE_SPEED);
 	std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(start, speed, Sprite::PROJECTILE);
 	return projectile;
+}
+
+void Player::respawn() {
+	position = startPosition;
+	velocityVec = Vector2Zero();
+	directionUnitVec = DEFAULT_UNIT_VECTOR;
+	rotation = 0.0;
 }

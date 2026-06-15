@@ -2,6 +2,7 @@
 
 Asteroid::Asteroid(int typeIdx) : Entity(ASTEROID_TYPES[typeIdx].sprite) {
 	this->typeIdx = typeIdx;
+	this->size = ASTEROID_TYPES[typeIdx].size;
 
 	float xVelocity = randFloat(MIN_ASTEROID_VELOCITY, MAX_ASTEROID_VELOCITY);
 	if (rand() % 2 == 0) xVelocity = -xVelocity;
