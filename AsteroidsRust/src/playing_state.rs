@@ -4,7 +4,6 @@ use ggez::event::EventHandler;
 use ggez::glam::Vec2;
 use ggez::graphics::{Color, DrawParam, Text, TextFragment};
 use ggez::input::keyboard::KeyCode;
-
 use rand::prelude::ThreadRng;
 use rand::Rng;
 use crate::app::{GameState, Transition};
@@ -26,11 +25,11 @@ pub struct PlayingState {
     inviolability_timer: f32,
     
     points: i32,
-    extra_lifes: i32,
+    extra_lives: i32,
 }
 
 impl PlayingState {
-    pub fn new(_ctx: &mut Context) -> PlayingState {
+    pub fn new() -> PlayingState {
         let mut rng = rand::rng();
         let mut asteroids: Vec<Asteroid> = Vec::new();
         let num_of_asteroids: i32 = rng.random_range(1..=MAX_ASTEROIDS as i32) + 4;
@@ -56,7 +55,7 @@ impl PlayingState {
             shot_timer: 0.0,
             inviolability_timer: 0.0,
             points: 0,
-            extra_lifes: 2,
+            extra_lives: 2,
         }
     }
 
@@ -68,7 +67,6 @@ impl PlayingState {
             projectile.move_entity(delta_time);
         }
         self.player.move_entity(delta_time);
-        //Ok(())
     }
 
     fn handle_input(&mut self, ctx: &mut Context, delta_time: f32) {
@@ -87,21 +85,17 @@ impl PlayingState {
         if ctx.keyboard.is_key_pressed(KeyCode::Space) && self.shot_timer <= 0f32 {
             self.shot_timer = PLAYER_SHOT_TIMER;
             self.projectiles.push(self.player.shoot_projectile());
-            println!("piuu\n");
         }
-        //Ok(())
     }
 
     fn handle_collision(&mut self) -> bool {
         for asteroid in self.asteroids.iter() {
             if self.player.check_collision(asteroid) && self.inviolability_timer <= 0f32 {
-                println!("kolizja! {:?}", asteroid.entity.position);
-                if self.extra_lifes == 0 {
-                    println!("porazka!");
+                if self.extra_lives == 0 {
                     return true
                 }
                 else {
-                    self.extra_lifes -= 1;
+                    self.extra_lives -= 1;
                     self.inviolability_timer = PLAYER_INVIOLABILITY_TIMER;
                     self.player.respawn();
                 }
@@ -126,32 +120,37 @@ impl PlayingState {
         }
         self.asteroids.extend(new_asteroids);
         false
-        //Ok(())
     }
 
     fn cleanup(&mut self) {
         self.asteroids.retain(|asteroid| asteroid.is_alive());
         self.projectiles.retain(|projectile| projectile.is_alive());
-        //Ok(())
+
+        if self.asteroids.is_empty() {
+            let previous_points = self.points;
+            let previous_lives = self.extra_lives;
+            *self = PlayingState::new();
+            self.points = previous_points;
+            self.extra_lives = previous_lives;
+        }
     }
 
     pub fn update(&mut self, ctx: &mut Context) -> Transition {
-        let dt = ctx.time.delta().as_secs_f32();
+        let dt = 1.0 / 60.0;
         self.shot_timer -= dt;
         self.inviolability_timer -= dt;
 
         self.handle_input(ctx, dt);
         self.update_entities(dt);
         if self.handle_collision() {
-            return Transition::ToState(GameState::NameEntry(NameEntryState::new(), self.points))
+            return Transition::ToState(GameState::NameEntry(NameEntryState::new(self.points)))
         }
         self.cleanup();
 
         Transition::None
-        //Ok(())
     }
 
-    pub fn draw(&mut self, ctx: &mut Context) {
+    pub fn draw(&mut self, ctx: &mut Context) -> GameResult {
         let mut canvas = graphics::Canvas::from_frame(ctx, Color::BLACK);
         self.player.draw(ctx, &mut canvas);
 
@@ -162,14 +161,14 @@ impl PlayingState {
             projectile.draw(ctx, &mut canvas);
         }
 
-        let lifes_text = Text::new(TextFragment::new(format!("extra lifes: {}", self.extra_lifes)).scale(20.0));
+        let lifes_text = Text::new(TextFragment::new(format!("extra lifes: {}", self.extra_lives)).scale(20.0));
         let points_text = Text::new(TextFragment::new(format!("points: {}", self.points)).scale(20.0));
-        let x = points_text.measure(ctx).unwrap().x;
+        let x = points_text.measure(ctx)?.x;
         canvas.draw(&lifes_text, DrawParam::default().dest([20.0, 20.0]));
         canvas.draw(&points_text, DrawParam::default().dest([WINDOW_WIDTH - x - 20.0, 20.0]));
 
-        canvas.finish(ctx);
+        canvas.finish(ctx)?;
         
-        //Ok(())
+        Ok(())
     }
 }

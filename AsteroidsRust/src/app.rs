@@ -13,7 +13,7 @@ use crate::scores_state::ScoresState;
 pub enum GameState {
     Menu(MenuState),
     Playing(PlayingState),
-    NameEntry(NameEntryState, i32),
+    NameEntry(NameEntryState),
     DisplayScores(ScoresState)
     //GameOver(GameOverState),
 }
@@ -41,7 +41,7 @@ impl EventHandler for App {
             let transition = match &mut self.state {
                 GameState::Menu(s) => s.update(ctx),
                 GameState::Playing(s) => s.update(ctx),
-                GameState::NameEntry(s, score) => s.update(ctx, score),
+                GameState::NameEntry(s) => s.update(ctx),
                 GameState::DisplayScores(s) => s.update(ctx),
                 //GameState::GameOver(s) => s.update(ctx),
             };
@@ -56,9 +56,9 @@ impl EventHandler for App {
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
         match &mut self.state {
-            GameState::Menu(s) => s.draw(ctx),
-            GameState::Playing(s) => s.draw(ctx),
-            GameState::NameEntry(s, score) => s.draw(ctx, score),
+            GameState::Menu(s) => s.draw(ctx)?,
+            GameState::Playing(s) => s.draw(ctx)?,
+            GameState::NameEntry(s) => s.draw(ctx)?,
             GameState::DisplayScores(s) => s.draw(ctx)?,
             //GameState::GameOver(s) => s.draw(ctx),
         }
@@ -68,7 +68,7 @@ impl EventHandler for App {
 
     fn text_input_event(&mut self, _ctx: &mut Context, character: char) -> GameResult {
         match &mut self.state {
-            GameState::NameEntry(s, _) => { s.text_input_event(character); }
+            GameState::NameEntry(s) => { s.text_input_event(character); }
             _ => {}
         }
 

@@ -6,25 +6,19 @@ use crate::sprites::SpriteStruct;
 use crate::utils::transform;
 
 pub fn draw_sprite(ctx: &mut Context, canvas: &mut Canvas,
-                   prefab: &'static SpriteStruct, position: Vec2, rotation: f32, color: Color) -> GameResult{
-    let self_length = prefab.g_points.len();
-    for (i, point) in prefab.g_points.iter().enumerate() {
-        let p1 = transform(prefab.g_points[i], position, rotation);
-        let p2 = transform(prefab.g_points[(i+1)%self_length], position, rotation);
-        let line = Mesh::new_line(
-            ctx,
-            &[ p1, p2 ],
-            1.0,
-            color,
-        )?;
-        canvas.draw(&line, DrawParam::default());
-    }
+                   prefab: &'static SpriteStruct, position: Vec2, rotation: f32, color: Color) -> GameResult {
+    let points: Vec<Vec2> = (0..=prefab.g_points.len())
+        .map(|i| transform(prefab.g_points[i % prefab.g_points.len()], position, rotation))
+        .collect();
+
+    let mesh = Mesh::new_line(ctx, &points, 1.0, color)?;
+    canvas.draw(&mesh, DrawParam::default());
     Ok(())
 }
 
-pub fn draw_option(ctx: &mut Context, canvas: &mut graphics::Canvas, label: &str, y: f32, selected: bool) {
+pub fn draw_option(ctx: &mut Context, canvas: &mut Canvas, label: &str, y: f32, selected: bool) -> GameResult {
     let text = Text::new(TextFragment::new(label).scale(36.0));
-    let dims = text.measure(ctx).unwrap();
+    let dims = text.measure(ctx)?;
     let text_width = dims.x;
     let text_height = dims.y;
 
@@ -42,7 +36,8 @@ pub fn draw_option(ctx: &mut Context, canvas: &mut graphics::Canvas, label: &str
             text_height + padding_y * 2.0,
         );
 
-        let border = Mesh::new_rectangle(ctx, DrawMode::stroke(2.0), rect, Color::WHITE).unwrap();
+        let border = Mesh::new_rectangle(ctx, DrawMode::stroke(2.0), rect, Color::WHITE)?;
         canvas.draw(&border, DrawParam::default());
     }
+    Ok(())
 }

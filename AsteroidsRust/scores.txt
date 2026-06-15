@@ -1,0 +1,10 @@
+rat;245;
+Ala;5;
+hero;999;
+boss;500;
+lord;1337;
+test1;13;
+test2;15;
+mikolaj;80;
+aa;0;
+asda;85;
