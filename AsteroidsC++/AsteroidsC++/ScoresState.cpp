@@ -28,18 +28,16 @@ void ScoresState::loadScores() {
                 highScores.push_back({ name, score });
             }
             catch (...) {
-                // Ignoruj błędnie sformatowane linie
+
             }
         }
     }
     file.close();
 
-    // Sortowanie wyników malejąco
     std::sort(highScores.begin(), highScores.end(), [](const PlayerScore& a, const PlayerScore& b) {
         return a.score > b.score;
         });
 
-    // Zostawiamy tylko top 5
     if (highScores.size() > 5) {
         highScores.resize(5);
     }
@@ -67,5 +65,5 @@ void ScoresState::draw() {
         DrawText("No scores yet!", WINDOW_WIDTH / 2 - MeasureText("No scores yet!", 20) / 2, 250, 20, GRAY);
     }
 
-    DrawText("Press ESC / SPACE to return to Menu", WINDOW_WIDTH / 2 - MeasureText("Press ESC / SPACE to return to Menu", 16) / 2, 500, 16, GRAY);
+    DrawText("Press SPACE to return to Menu", WINDOW_WIDTH / 2 - MeasureText("Press SPACE to return to Menu", 16) / 2, 500, 16, GRAY);
 }

@@ -3,7 +3,7 @@ use ggez::{graphics, Context, GameResult};
 use ggez::graphics::{Color, DrawParam, Text, TextFragment};
 use ggez::input::keyboard::KeyCode;
 use crate::app::{Transition, GameState};
-use crate::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
+use crate::constants::*;
 use crate::playing_state::PlayingState;
 use crate::renderer::draw_option;
 use crate::scores_state::ScoresState;
@@ -58,7 +58,7 @@ impl MenuState {
     pub fn draw(&mut self, ctx: &mut Context) -> GameResult {
         let mut canvas = graphics::Canvas::from_frame(ctx, Color::BLACK);
 
-        let game_title = Text::new(TextFragment::new("ASTEROIDS").scale(72.0));
+        let game_title = Text::new(TextFragment::new("ASTEROIDS").scale(60.0).font(MAIN_FONT));
         let dims = game_title.measure(ctx)?;
         let x = (WINDOW_WIDTH - dims.x) / 2.0;
         let y = (WINDOW_HEIGHT - dims.y) / 4.0;

@@ -3,7 +3,7 @@ use ggez::{graphics, Context, GameResult};
 use ggez::graphics::{Color, DrawParam, Text, TextFragment};
 use ggez::input::keyboard::KeyCode;
 use crate::app::{Transition, GameState};
-use crate::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
+use crate::constants::{MAIN_FONT, WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::menu_state::MenuState;
 
 #[derive(Clone)]
@@ -62,7 +62,7 @@ impl ScoresState {
     }
 
     pub fn update(&mut self, ctx: &mut Context) -> Transition {
-        if ctx.keyboard.is_key_just_pressed(KeyCode::Left) {
+        if ctx.keyboard.is_key_just_pressed(KeyCode::Space) {
             return Transition::ToState(GameState::Menu(MenuState::new()));
         }
 
@@ -82,7 +82,7 @@ impl ScoresState {
     }
 
     fn draw_centered_text(ctx: &mut Context, canvas: &mut graphics::Canvas, label: &str, y: f32, scale: f32) -> GameResult {
-        let text = Text::new(TextFragment::new(label).scale(scale));
+        let text = Text::new(TextFragment::new(label).scale(scale).font(MAIN_FONT));
         let dims = text.measure(ctx)?;
         let x = (WINDOW_WIDTH - dims.x) / 2.0;
 
@@ -93,15 +93,18 @@ impl ScoresState {
     pub fn draw(&mut self, ctx: &mut Context) -> GameResult {
         let mut canvas = graphics::Canvas::from_frame(ctx, Color::BLACK);
 
-        let title = Text::new(TextFragment::new("Scores").scale(54.0));
+        let title = Text::new(TextFragment::new("HIGH SCORES")
+            .color(Color::YELLOW)
+            .scale(44.0)
+            .font(MAIN_FONT));
         let title_dims = title.measure(ctx)?;
         let title_x = (WINDOW_WIDTH - title_dims.x) / 2.0;
-        let title_y = 40.0;
+        let title_y = 60.0;
         canvas.draw(&title, DrawParam::default().dest([title_x, title_y]));
 
         if self.scores.is_empty() {
-            Self::draw_centered_text(ctx, &mut canvas, "No games played",
-                                     WINDOW_HEIGHT / 2.0, 32.0)?;
+            Self::draw_centered_text(ctx, &mut canvas, "No scores yet!",
+                                     WINDOW_HEIGHT / 2.0, 22.0)?;
         } else {
             let visible_count = 5;
             let start = self.scroll_index;
@@ -115,12 +118,17 @@ impl ScoresState {
                 let line = format!("{}. {} - {}", rank, player.name, player.score);
 
                 Self::draw_centered_text(ctx, &mut canvas, &line,
-                    base_y + i as f32 * line_spacing, 30.0, )?;
+                    base_y + i as f32 * line_spacing, 20.0, )?;
             }
         }
 
-        let back_hint = Text::new(TextFragment::new("Press <- to back").scale(18.0));
-        canvas.draw(&back_hint, DrawParam::default().dest([20.0, WINDOW_HEIGHT - 20.0]),
+        let back_hint = Text::new(TextFragment::new("Press SPACE to return to Menu")
+            .color(Color::new(0.3529412, 0.3529412, 0.3529412, 1.0))
+            .scale(14.0).
+            font(MAIN_FONT));
+        let hint_dims = back_hint.measure(ctx)?;
+        let hint_x = (WINDOW_WIDTH - hint_dims.x) / 2.0;
+        canvas.draw(&back_hint, DrawParam::default().dest([hint_x, 500.0]),
         );
 
         canvas.finish(ctx)?;

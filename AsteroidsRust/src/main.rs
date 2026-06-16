@@ -27,6 +27,7 @@ fn main() {
             height: WINDOW_HEIGHT,
             ..Default::default()
         })
+        .add_resource_path("./resources")
         .build()
         .expect("aieee, could not create ggez context!");
 

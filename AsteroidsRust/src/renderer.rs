@@ -1,7 +1,7 @@
 use ggez::{graphics, Context, GameResult};
 use ggez::glam::Vec2;
 use ggez::graphics::{Canvas, Color, DrawMode, DrawParam, Mesh, Rect, Text, TextFragment};
-use crate::constants::WINDOW_WIDTH;
+use crate::constants::{MAIN_FONT, WINDOW_WIDTH};
 use crate::sprites::SpriteStruct;
 use crate::utils::transform;
 
@@ -17,7 +17,7 @@ pub fn draw_sprite(ctx: &mut Context, canvas: &mut Canvas,
 }
 
 pub fn draw_option(ctx: &mut Context, canvas: &mut Canvas, label: &str, y: f32, selected: bool) -> GameResult {
-    let text = Text::new(TextFragment::new(label).scale(36.0));
+    let text = Text::new(TextFragment::new(label).scale(28.0).font(MAIN_FONT));
     let dims = text.measure(ctx)?;
     let text_width = dims.x;
     let text_height = dims.y;

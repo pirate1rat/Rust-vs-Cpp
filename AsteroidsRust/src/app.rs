@@ -1,10 +1,8 @@
-use ggez::{ContextBuilder};
+use ggez::{graphics, ContextBuilder};
 use ggez::conf::WindowMode;
 use ggez::event::{self, EventHandler};
 use ggez::{Context, GameResult};
-use ggez::timer;
-use rand::Rng;
-use crate::constants::*;
+use ggez::graphics::FontData;
 use crate::playing_state::PlayingState;
 use crate::menu_state::MenuState;
 use crate::name_entry_state::NameEntryState;
@@ -29,6 +27,9 @@ pub struct App {
 
 impl App {
     pub fn new(ctx: &mut Context) -> App {
+        let font = FontData::from_path(ctx, "/PressStart2P-Regular.ttf").unwrap();
+        ctx.gfx.add_font("arcade", font);
+
         App {
             state: GameState::Menu(MenuState::new()),
         }

@@ -30,3 +30,5 @@ pub const PLAYER_ACCELERATION: f32 = 300.0;
 
 pub const PROJECTILE_SPEED: f32 = 500.0;
 pub const PROJECTILE_START_OFFSET: f32 = 10.0;
+
+pub const MAIN_FONT: &str = "arcade";
