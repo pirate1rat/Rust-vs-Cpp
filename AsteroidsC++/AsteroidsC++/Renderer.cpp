@@ -43,3 +43,30 @@ void drawSprite(const SpriteStruct& prefab, Vector2 position, float rotation, Co
 #endif // DEBUG
 
 }
+
+void DrawOption(const char* label, float y, bool selected) {
+	constexpr float fontSize = 36.0f;
+	constexpr float spacing = 1.0f;
+
+	Vector2 textSize = MeasureTextEx(GetFontDefault(), label, fontSize, spacing);
+
+	float x = (WINDOW_WIDTH - textSize.x) / 2.0f;
+
+	DrawTextEx(GetFontDefault(), label, { x, y },
+		fontSize, spacing, WHITE);
+
+	if (selected)
+	{
+		constexpr float paddingX = 12.0f;
+		constexpr float paddingY = 8.0f;
+
+		Rectangle rect{
+			x - paddingX,
+			y - paddingY,
+			textSize.x + paddingX * 2.0f,
+			textSize.y + paddingY * 2.0f
+		};
+
+		DrawRectangleLinesEx(rect, 2.0f, WHITE);
+	}
+}

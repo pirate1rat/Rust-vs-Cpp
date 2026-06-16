@@ -161,7 +161,7 @@ impl PlayingState {
             projectile.draw(ctx, &mut canvas);
         }
 
-        let lifes_text = Text::new(TextFragment::new(format!("extra lifes: {}", self.extra_lives)).scale(20.0));
+        let lifes_text = Text::new(TextFragment::new(format!("extra lives: {}", self.extra_lives)).scale(20.0));
         let points_text = Text::new(TextFragment::new(format!("points: {}", self.points)).scale(20.0));
         let x = points_text.measure(ctx)?.x;
         canvas.draw(&lifes_text, DrawParam::default().dest([20.0, 20.0]));

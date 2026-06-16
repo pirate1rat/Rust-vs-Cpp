@@ -66,10 +66,10 @@ impl MenuState {
         canvas.draw(&game_title, DrawParam::default().dest([x, y]));
 
         draw_option(ctx, &mut canvas, "Play",
-            (WINDOW_HEIGHT / 2.0) - 20.0, self.current_option == MenuOption::Play);
+            (WINDOW_HEIGHT / 2.0) - 20.0, self.current_option == MenuOption::Play)?;
 
         draw_option(ctx, &mut canvas, "Scores",
-            (WINDOW_HEIGHT / 2.0) + 60.0, self.current_option == MenuOption::Scores);
+            (WINDOW_HEIGHT / 2.0) + 60.0, self.current_option == MenuOption::Scores)?;
 
         // draw_option(ctx, &mut canvas, "Demo",
         //     (WINDOW_HEIGHT / 2.0) + 140.0, self.current_option == MenuOption::Demo);

@@ -3,6 +3,7 @@
 #include "App.h"
 #include "ScoresState.h"
 #include "Constants.h"
+#include "Renderer.h"
 #include <raylib.h>
 
 MenuState::MenuState() {
@@ -27,11 +28,7 @@ void MenuState::update(App& app, float deltaTime) {
 }
 
 void MenuState::draw() {
-    DrawText("ASTEROIDS", WINDOW_WIDTH / 2 - MeasureText("ASTEROIDS", 40) / 2, 150, 40, RAYWHITE);
-
-    Color playColor = (selectedOption == 0) ? YELLOW : RAYWHITE;
-    Color scoreColor = (selectedOption == 1) ? YELLOW : RAYWHITE;
-
-    DrawText("Play", WINDOW_WIDTH / 2 - MeasureText("Play", 20) / 2, 300, 20, playColor);
-    DrawText("Scores", WINDOW_WIDTH / 2 - MeasureText("Scores", 20) / 2, 350, 20, scoreColor);
+    DrawText("ASTEROIDS", WINDOW_WIDTH / 2 - MeasureText("ASTEROIDS", 72) / 2, WINDOW_HEIGHT / 4, 72, RAYWHITE);
+    DrawOption("Play", WINDOW_HEIGHT / 2 - 20, selectedOption == 0);
+    DrawOption("Scores", WINDOW_HEIGHT / 2 + 60, selectedOption == 1);
 }

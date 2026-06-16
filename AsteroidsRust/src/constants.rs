@@ -4,7 +4,7 @@ pub const WINDOW_WIDTH: f32 = 800.0;
 pub const WINDOW_HEIGHT: f32 = 600.0;
 pub const MARGIN: f32 = 30.0;
 
-pub const SPAWNPOINT_SAFEZONE: f32 = 200.0; // spawnpoint for player
+pub const SPAWNPOINT_SAFEZONE: f32 = 250.0; // spawnpoint for player
 
 pub const MAX_ASTEROIDS: usize = 7;
 pub const MIN_ASTEROID_VELOCITY: f32 = 40.0;

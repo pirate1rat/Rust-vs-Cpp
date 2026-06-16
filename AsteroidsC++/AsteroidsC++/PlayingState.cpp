@@ -104,6 +104,21 @@ void PlayingState::clear() {
     std::erase_if(projectiles, [](const auto& p) {
         return !p->alive;
         });
+
+    if (asteroids.empty()) {
+        reset();
+    }
+}
+
+void PlayingState::reset() {
+    int numOfAsteroids = (rand() % MAX_ASTEROIDS) + 4;
+
+    for (int i = 0; i < numOfAsteroids; i++) {
+        Sprite randomSprite = static_cast<Sprite>((rand() % (Sprite::PROJECTILE - 2)) + 1);
+        asteroids.push_back(std::make_unique<Asteroid>(randomSprite));
+    }
+
+    player.respawn();
 }
 
 void PlayingState::draw() {
@@ -114,4 +129,12 @@ void PlayingState::draw() {
     for (auto& projectile : projectiles) {
         projectile->draw();
     }
+
+    std::string livesText = std::format("extra lives: {}", extraLives);
+    std::string pointsText = std::format("points: {}", points);
+
+    DrawText(livesText.c_str(), 20, 20, 20, RAYWHITE);
+    DrawText(pointsText.c_str(), 
+        WINDOW_WIDTH - MeasureText(pointsText.c_str(), 20) - 20,
+        20, 20, RAYWHITE);
 }

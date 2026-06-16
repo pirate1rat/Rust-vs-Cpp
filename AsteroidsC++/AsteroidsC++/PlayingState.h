@@ -1,7 +1,8 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include <iostream>
+#include <string>
+#include <format>
 #include "Player.h"
 #include "State.h"
 #include "Asteroid.h"
@@ -29,5 +30,6 @@ private:
     void updateEntities(float deltaTime);
     bool checkCollisions();
     void clear();
+    void reset();
 };
 
