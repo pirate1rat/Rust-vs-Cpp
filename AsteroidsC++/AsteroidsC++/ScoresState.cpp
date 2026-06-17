@@ -36,34 +36,49 @@ void ScoresState::loadScores() {
 
     std::sort(highScores.begin(), highScores.end(), [](const PlayerScore& a, const PlayerScore& b) {
         return a.score > b.score;
-        });
-
-    if (highScores.size() > 5) {
-        highScores.resize(5);
-    }
+     });
 }
 
 void ScoresState::update(App& app, float deltaTime) {
-    if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
+    if (IsKeyPressed(KEY_SPACE)) {
         app.changeState(std::make_unique<MenuState>());
+    }
+
+    if (!highScores.empty()) {
+        int maxStart = (highScores.size() > 5) ? (highScores.size() - 5) : 0;
+
+        if (IsKeyPressed(KEY_UP) && scrollIdx > 0) {
+            scrollIdx--;
+        }
+
+        if (IsKeyPressed(KEY_DOWN) && scrollIdx < maxStart) {
+            scrollIdx++;
+        }
     }
 }
 
 void ScoresState::draw() {
     DrawText("HIGH SCORES", WINDOW_WIDTH / 2 - MeasureText("HIGH SCORES", 36) / 2, 80, 36, GOLD);
 
-    int startY = 180;
-    for (size_t i = 0; i < highScores.size(); ++i) {
-        std::string rankText = std::to_string(i + 1) + ". " + highScores[i].name;
-        std::string scoreText = std::to_string(highScores[i].score);
-
-        DrawText(rankText.c_str(), WINDOW_WIDTH / 2 - 150, startY + (i * 40), 20, RAYWHITE);
-        DrawText(scoreText.c_str(), WINDOW_WIDTH / 2 + 80, startY + (i * 40), 20, YELLOW);
-    }
-
     if (highScores.empty()) {
         DrawText("No scores yet!", WINDOW_WIDTH / 2 - MeasureText("No scores yet!", 20) / 2, 250, 20, GRAY);
     }
+    else {
+        int startY = 180;
+        int visibleCount = 5;
+        int end = std::min(static_cast<size_t>(scrollIdx + visibleCount), highScores.size());
 
-    DrawText("Press SPACE to return to Menu", WINDOW_WIDTH / 2 - MeasureText("Press SPACE to return to Menu", 16) / 2, 500, 16, GRAY);
+        for (int i = scrollIdx; i < end; i++) {
+            int row = i - scrollIdx;
+            std::string rankText = std::to_string(i + 1) + ". " + highScores[i].name;
+            std::string scoreText = std::to_string(highScores[i].score);
+
+            DrawText(rankText.c_str(), WINDOW_WIDTH / 2 - 150, startY + (row * 40), 20, RAYWHITE);
+            DrawText(scoreText.c_str(), WINDOW_WIDTH / 2 + 80, startY + (row * 40), 20, YELLOW);
+        }
+    }
+
+    DrawText("Press SPACE to return to Menu",
+        WINDOW_WIDTH / 2 - MeasureText("Press SPACE to return to Menu", 16) / 2,
+        500, 16, GRAY);
 }

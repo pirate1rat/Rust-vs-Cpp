@@ -10,7 +10,6 @@ private:
 
 public:
     NameEntryState(int score);
-    //void handleInput(App& app, float deltaTime) override;
     void update(App& app, float deltaTime) override;
     void draw() override;
 };

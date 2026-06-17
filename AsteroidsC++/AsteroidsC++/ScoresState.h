@@ -12,10 +12,10 @@ class ScoresState : public State {
 private:
     std::vector<PlayerScore> highScores;
     void loadScores();
+    int scrollIdx;
 
 public:
     ScoresState();
-    //void handleInput(App& app, float deltaTime) override;
     void update(App& app, float deltaTime) override;
     void draw() override;
 };
